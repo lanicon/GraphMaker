@@ -121,7 +121,7 @@ namespace GraphMaker
         {
             x = e.X;
             y = e.Y;
-            tbXY.Text=$"{x}:{y}";
+            //tbXY.Text=$"{x}:{y}";
 
             if(clickState == ClickStates.Move)
             {
