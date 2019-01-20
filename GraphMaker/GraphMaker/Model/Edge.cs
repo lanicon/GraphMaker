@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Cryptography;
 
 namespace GraphMaker.Model
 {
@@ -24,7 +23,7 @@ namespace GraphMaker.Model
                 throw new ArgumentException(nameof(node));
             }
 
-            return node == First ? First : Second;
+            return node == First ? Second : First;
         }
 
         public bool IsIncident(INode node)
