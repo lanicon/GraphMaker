@@ -11,11 +11,17 @@ namespace GraphMaker
     public interface IGraph
     {
         INode AddNode();
+
         void DeleteNode(INode v);
+
         IEdge AddEdge(INode v1, INode v2);
-        void DeleteEdge(INode v1, INode v2);
+
+        void DeleteEdge(IEdge edge);
+
         List<INode> Nodes { get; }
+
         List<IEdge> Edges { get; }
+
         event GraphChangeEvent Changed;
     }
 }

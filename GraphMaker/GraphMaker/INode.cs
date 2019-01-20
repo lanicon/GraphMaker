@@ -9,8 +9,9 @@ namespace GraphMaker
     public interface INode
     {
         int Number { get; }
-        IReadOnlyList<IEdge> GetIncidentNodes { get; }
-        IReadOnlyList<IEdge> GetIncidentEdges { get; }
-        
+
+        List<IEdge> IncidentEdges { get; }
+
+        List<INode> IncidentNodes { get; }
     }
 }

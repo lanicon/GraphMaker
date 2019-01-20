@@ -1,12 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace GraphMaker.Model
 {
-    class Edge
+    public class Edge : IEdge
     {
+        public INode First { get; set; }
+
+        public INode Second { get; set; }
+
+        public int Length { get; set; }
+
+        public Edge(INode first, INode second)
+        {
+            First = first;
+            Second = second;
+        }
+
+        public INode OtherNode(INode node)
+        {
+            if (!IsIncident(node))
+            {
+                throw new ArgumentException(nameof(node));
+            }
+
+            return node == First ? First : Second;
+        }
+
+        public bool IsIncident(INode node)
+        {
+            return node == First || node == Second;
+        }
     }
 }

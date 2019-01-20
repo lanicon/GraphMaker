@@ -4,28 +4,39 @@ namespace GraphMaker.Model
 {
     public class Graph : IGraph
     {
+        public INode this[int index] => Nodes[index];
+
+        public List<INode> Nodes { get; } = new List<INode>();
+
+        public List<IEdge> Edges { get; } = new List<IEdge>();
+
+        public event GraphChangeEvent Changed;
+
         public INode AddNode()
         {
-            throw new System.NotImplementedException();
+            var node = new Node(Nodes.Count);
+            Nodes.Add(node);
+            Changed?.Invoke();
+            return node;
         }
 
         public void DeleteNode(INode v)
         {
-            throw new System.NotImplementedException();
+            Nodes.Remove(v);
+            Changed?.Invoke();
         }
 
         public IEdge AddEdge(INode v1, INode v2)
         {
-            throw new System.NotImplementedException();
+            var node = Node.Connect(v1, v2);
+            Changed?.Invoke();
+            return node;
         }
 
-        public void DeleteEdge(INode v1, INode v2)
+        public void DeleteEdge(IEdge edge)
         {
-            throw new System.NotImplementedException();
+            Node.Disconnect(edge);
+            Changed?.Invoke();
         }
-
-        public List<INode> Nodes { get; }
-        public List<IEdge> Edges { get; }
-        public event GraphChangeEvent Changed;
     }
 }
