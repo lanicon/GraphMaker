@@ -1,7 +1,4 @@
 ﻿using System;
-using System.CodeDom;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using FluentAssertions;
 using GraphMaker.Model;
 using NUnit.Framework;
@@ -28,7 +25,7 @@ namespace GraphMaker.Tests
         }
 
         [Test]
-        public void OtherNode_OnIncidentNode_WorksCorrectly()
+        public void OtherNode_OnIncidentNode()
         {
             var edge = new Edge(node1, node2);
             edge.OtherNode(node1).Should().Be(node2);
@@ -42,7 +39,7 @@ namespace GraphMaker.Tests
         }
 
         [Test]
-        public void OtherNode_OnIncidentNode_ShouldBeTrue()
+        public void IsIncident_OnIncidentNode_ShouldBeTrue()
         {
             new Edge(node1, node2).IsIncident(node1).Should().BeTrue();
         }
