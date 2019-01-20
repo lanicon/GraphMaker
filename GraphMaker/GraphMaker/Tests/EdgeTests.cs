@@ -11,11 +11,7 @@ namespace GraphMaker.Tests
     [TestFixture]
     public class EdgeTests
     {
-        private Node node1;
-
-        private Node node2;
-
-        private Node node3;
+        private INode node1, node2, node3;
 
         [SetUp]
         public void SetUp()
@@ -42,19 +38,13 @@ namespace GraphMaker.Tests
         [Test]
         public void IsIncident_OnNonIncidentNode_ShouldBeFalse()
         {
-            new Edge(node1, node2)
-                .IsIncident(node3)
-                .Should()
-                .BeFalse();
+            new Edge(node1, node2).IsIncident(node3).Should().BeFalse();
         }
 
         [Test]
         public void OtherNode_OnIncidentNode_ShouldBeTrue()
         {
-            new Edge(node1, node2)
-                .IsIncident(node1)
-                .Should()
-                .BeTrue();
+            new Edge(node1, node2).IsIncident(node1).Should().BeTrue();
         }
     }
 }

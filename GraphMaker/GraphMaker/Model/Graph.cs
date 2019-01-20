@@ -28,9 +28,10 @@ namespace GraphMaker.Model
 
         public IEdge AddEdge(INode v1, INode v2)
         {
-            var node = Node.Connect(v1, v2);
+            var edge = Node.Connect(v1, v2);
+            Edges.Add(edge);
             Changed?.Invoke();
-            return node;
+            return edge;
         }
 
         public void DeleteEdge(IEdge edge)
