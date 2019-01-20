@@ -23,6 +23,7 @@ namespace GraphMaker
         gNode selectedNode;
         gNode clickedNode;
         gEdge selectedEdge;
+        gEdge clickedEdge;
         public Form1()
         {
             InitializeComponent();
@@ -63,30 +64,58 @@ namespace GraphMaker
             }
             else
             {
-                
-            }
-
-
-
-
-            /*
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-                if (selectedNode == null)
+                if(selectedEdge == null)
                 {
-                    clickedNode = new gNode(x, y, Color.Black);
-                    clickState = ClickStates.Add;
+                    if (selectedNode != null)
+                        if (e.Button == System.Windows.Forms.MouseButtons.Left)
+                        {
+                            clickedNode = selectedNode;
+                            clickState = ClickStates.Add;
+                        }
                 }
                 else
                 {
-                    clickedNode = selectedNode;
-                    clickState = ClickStates.Move;
+                    if (selectedEdge != null)
+                        if (e.Button == System.Windows.Forms.MouseButtons.Right)
+                        {
+                            clickedEdge = selectedEdge;
+                            clickState = ClickStates.Delete;
+                        }
                 }
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
-                if (selectedNode != null)
+            }
+        }
+
+        private void imDrawSpace_MouseUp(object sender, MouseEventArgs e)
+        {
+            if(nodesEdgesState == NodesEdges.Nodes)
+                switch (clickState)
                 {
-                    clickedNode = selectedNode;
-                    clickState = ClickStates.Delete;
-                }*/
+                    case ClickStates.Add:
+                        nodes.Add(clickedNode);
+                        break;
+                    case ClickStates.Delete:
+                        nodes.Remove(clickedNode);
+                        break;
+                    case ClickStates.Move:
+                        break;
+                }
+            else
+            {
+                switch(clickState)
+                {
+                    case ClickStates.Add:
+                        if(selectedNode != null)
+                            edges.Add(new gEdge(clickedNode, selectedNode, Color.Black));
+                        break;
+                    case ClickStates.Delete:
+                        edges.Remove(clickedEdge);
+                        break;
+                }
+            }
+            clickedNode = null;
+            clickedEdge = null;
+            clickState = ClickStates.NoClick;
+            draw();
         }
 
         private void pDrawSpace_MouseMove(object sender, MouseEventArgs e)
@@ -105,6 +134,7 @@ namespace GraphMaker
 
             int size = trackBarNodeSize.Value;
             selectedNode = null;
+            selectedEdge = null;
             mouseOn = NodesEdges.None;
             foreach (var edge in edges)
             {
@@ -134,9 +164,9 @@ namespace GraphMaker
         private bool pointOnEdge(int x, int y, gEdge edge)
         {
             bool onLine = Math.Abs((x - edge.node1.x) / (float)(edge.node2.x - edge.node1.x) - (y - edge.node1.y) / (float)(edge.node2.y - edge.node1.y)) <= 0.1;
-            bool inSementX = (x <= edge.node1.x && x >= edge.node2.x) || (x <= edge.node2.x && x >= edge.node1.x);
-            bool inSementY = (y <= edge.node1.y && y >= edge.node2.y) || (y <= edge.node2.y && y >= edge.node1.y);
-            return onLine && inSementX && inSementY;
+            bool onSementX = (x <= edge.node1.x && x >= edge.node2.x) || (x <= edge.node2.x && x >= edge.node1.x);
+            bool onSementY = (y <= edge.node1.y && y >= edge.node2.y) || (y <= edge.node2.y && y >= edge.node1.y);
+            return onLine && onSementX && onSementY;
         }
 
         private void trackBarNodeSize_ValueChanged(object sender, EventArgs e)
@@ -144,23 +174,6 @@ namespace GraphMaker
             draw();
         }
 
-        private void imDrawSpace_MouseUp(object sender, MouseEventArgs e)
-        {
-            switch(clickState)
-            {
-                case ClickStates.Add:
-                    nodes.Add(clickedNode);
-                    break;
-                case ClickStates.Delete:
-                    nodes.Remove(clickedNode);
-                    break;
-                case ClickStates.Move:
-                    break;
-            }
-            clickedNode = null;
-            clickState = ClickStates.NoClick;
-            draw();
-        }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
@@ -186,6 +199,11 @@ namespace GraphMaker
             {
                 Pen pen = new Pen(edge.color);
                 bufferGraphics.DrawLine(pen, edge.node1.x, edge.node1.y, edge.node2.x, edge.node2.y);
+            }
+            if(clickState == ClickStates.Add && nodesEdgesState == NodesEdges.Edges && clickedNode != null)
+            {
+                Pen pen = new Pen(Color.Black);
+                bufferGraphics.DrawLine(pen, clickedNode.x, clickedNode.y, x, y);
             }
             imDrawSpace.Image = buffer;
         }
