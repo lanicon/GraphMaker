@@ -8,8 +8,10 @@ namespace GraphMaker
 {
     public interface IEdge
     {
-        INode Node1 { get; set; }
-        INode Node2 { get; set; }
+        INode First { get; set; }
+        INode Second { get; set; }
         int Length { get; set; }
+        INode OtherNode(INode node);
+        bool IsIncident(INode node);
     }
 }
