@@ -39,7 +39,7 @@ namespace GraphMaker
         {
             if(nodesEdgesState == NodesEdges.Nodes)
             {
-                if(selectedNode == null)
+                if(mouseOn == NodesEdges.None)
                 {
                     if(e.Button == System.Windows.Forms.MouseButtons.Left)
                     {
@@ -64,22 +64,21 @@ namespace GraphMaker
             }
             else
             {
-                if(selectedEdge == null)
+                if(mouseOn == NodesEdges.Edges)
                 {
-                    if (selectedNode != null)
+                    if (e.Button == System.Windows.Forms.MouseButtons.Right)
+                    {
+                        clickedEdge = selectedEdge;
+                        clickState = ClickStates.Delete;
+                    }
+                }
+                else
+                {
+                    if (mouseOn == NodesEdges.Nodes)
                         if (e.Button == System.Windows.Forms.MouseButtons.Left)
                         {
                             clickedNode = selectedNode;
                             clickState = ClickStates.Add;
-                        }
-                }
-                else
-                {
-                    if (selectedEdge != null)
-                        if (e.Button == System.Windows.Forms.MouseButtons.Right)
-                        {
-                            clickedEdge = selectedEdge;
-                            clickState = ClickStates.Delete;
                         }
                 }
             }
@@ -136,17 +135,6 @@ namespace GraphMaker
             selectedNode = null;
             selectedEdge = null;
             mouseOn = NodesEdges.None;
-            foreach (var edge in edges)
-            {
-                if (pointOnEdge(x, y, edge))
-                {
-                    edge.color = Color.Red;
-                    mouseOn = NodesEdges.Edges;
-                    selectedEdge = edge;
-                }
-                else
-                    edge.color = Color.Black;
-            }
             foreach (var node in nodes)
             {
                 if (Math.Abs(node.x - x) < size / 2 && Math.Abs(node.y - y) < size / 2 && selectedNode == null)
@@ -157,6 +145,17 @@ namespace GraphMaker
                 }
                 else
                     node.color = Color.Black;
+            }
+            foreach (var edge in edges)
+            {
+                if (pointOnEdge(x, y, edge) && mouseOn != NodesEdges.Nodes)
+                {
+                    edge.color = Color.Red;
+                    mouseOn = NodesEdges.Edges;
+                    selectedEdge = edge;
+                }
+                else
+                    edge.color = Color.Black;
             }
             draw();
         }
