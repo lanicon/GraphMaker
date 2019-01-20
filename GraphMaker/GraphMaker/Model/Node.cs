@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace GraphMaker.Model
@@ -13,13 +12,16 @@ namespace GraphMaker.Model
 
         public int Number { get; }
 
-        public List<IEdge> IncidentEdges { get; set; } = new List<IEdge>();
+        public List<IEdge> IncidentEdges { get; } = new List<IEdge>();
 
-        public List<INode> GetIncidentNodes()
+        public List<INode> IncidentNodes
         {
-            return IncidentEdges
-                .Select(z => z.OtherNode(this))
-                .ToList();
+            get
+            {
+                return IncidentEdges
+                    .Select(z => z.OtherNode(this))
+                    .ToList();
+            }
         }
 
         public static IEdge Connect(INode v1, INode v2)
