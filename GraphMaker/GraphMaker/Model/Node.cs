@@ -45,5 +45,10 @@ namespace GraphMaker.Model
             edge.First.IncidentEdges.Remove(edge);
             edge.Second.IncidentEdges.Remove(edge);
         }
+
+        public override string ToString()
+        {
+            return Number.ToString();
+        }
     }
 }

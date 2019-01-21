@@ -58,13 +58,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\NodeExtensions.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="GraphExtensions.cs" />
+    <Compile Include="Extensions\GraphExtensions.cs" />
     <Compile Include="IEdge.cs" />
     <Compile Include="IGraph.cs" />
     <Compile Include="INode.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Tests\EdgeTests.cs" />
     <Compile Include="Tests\GraphTests.cs" />
     <Compile Include="Tests\NodeTests.cs" />
+    <Compile Include="Tests\NodeTraversalTests.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
