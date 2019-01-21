@@ -6,26 +6,27 @@ using GraphMaker.Model;
 
 namespace GraphMaker
 {
-    public class NodeInfo
-    {
-        public int X { get; set; }
-
-        public int Y { get; set; }
-
-        public Color Color { get; set; }
-    }
-
-    public class EdgeInfo
-    {
-        public NodeInfo From { get; set; }
-
-        public NodeInfo To { get; set; }
-
-        public Color Color { get; set; }
-    }
-
     public partial class Form1 : Form
     {
+        private class NodeInfo
+        {
+            public int X { get; set; }
+
+            public int Y { get; set; }
+
+            public Color Color { get; set; }
+        }
+
+        private class EdgeInfo
+        {
+            public NodeInfo From { get; set; }
+
+            public NodeInfo To { get; set; }
+
+            public Color Color { get; set; }
+        }
+
+
         private enum NodesEdges
         {
             Nodes,
