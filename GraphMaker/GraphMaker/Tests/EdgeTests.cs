@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using FluentAssertions;
 using GraphMaker.Model;
 using NUnit.Framework;
@@ -16,6 +17,21 @@ namespace GraphMaker.Tests
             node1 = new Node(1);
             node2 = new Node(2);
             node3 = new Node(3);
+        }
+        
+        [Test]
+        public void EdgeCreation()
+        {
+            var edge = new Edge(node1, node2);
+            edge.First.Should().Be(node1);
+            edge.Second.Should().Be(node2);
+            edge.Length.Should().Be(0);
+        }
+
+        [Test]
+        public void EdgeCreation_ShouldNotCreateLoop()
+        {
+            Assert.Throws<ArgumentException>(() => new Edge(node1, node1));
         }
 
         [Test]

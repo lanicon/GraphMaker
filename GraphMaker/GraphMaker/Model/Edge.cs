@@ -12,6 +12,11 @@ namespace GraphMaker.Model
 
         public Edge(INode first, INode second)
         {
+            if (first == second)
+            {
+                throw new ArgumentException("the beginning and end of the edge are the same");
+            }
+
             First = first;
             Second = second;
         }
