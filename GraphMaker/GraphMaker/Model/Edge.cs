@@ -4,11 +4,16 @@ namespace GraphMaker.Model
 {
     public class Edge : IEdge
     {
-        public INode First { get; set; }
+        public INode First { get; }
 
-        public INode Second { get; set; }
+        public INode Second { get; }
 
         public int Length { get; set; }
+
+        public Edge(INode first, INode second, int length) : this(first, second)
+        {
+            Length = length;
+        }
 
         public Edge(INode first, INode second)
         {

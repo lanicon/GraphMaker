@@ -14,9 +14,9 @@ namespace GraphMaker
 
         void DeleteEdge(IEdge edge);
 
-        List<INode> Nodes { get; }
+        IReadOnlyList<INode> Nodes { get; }
 
-        List<IEdge> Edges { get; }
+        IReadOnlyList<IEdge> Edges { get; }
 
         event GraphChangeEvent Changed;
     }
