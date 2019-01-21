@@ -36,22 +36,22 @@ namespace GraphMaker.Model
             return node;
         }
 
-        public void DeleteNode(INode v)
+        public void DeleteNode(INode node)
         {
             // Удаляем все инцидентные рёбра (вместе с ними и вершины)
-            for (var i = v.IncidentEdges.Count - 1; i >= 0; i--)
+            for (var i = node.IncidentEdges.Count - 1; i >= 0; i--)
             {
-                var edge = v.IncidentEdges[i];
+                var edge = node.IncidentEdges[i];
                 Node.Disconnect(edge);
             }
 
-            nodes.Remove(v);
+            nodes.Remove(node);
             Changed?.Invoke();
         }
 
-        public IEdge AddEdge(INode v1, INode v2)
+        public IEdge AddEdge(INode first, INode second)
         {
-            var edge = Node.Connect(v1, v2);
+            var edge = Node.Connect(first, second);
             Changed?.Invoke();
             return edge;
         }
