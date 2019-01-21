@@ -5,27 +5,33 @@ namespace GraphMaker.Model
 {
     public class Graph : IGraph
     {
-        public INode this[int index] => Nodes[index];
+        // Все вершины в графе нумеруются с 0 и никогда не перенумеруются
+        // (счётчик всегда увеличивается)
+        private int numberCounter = 0;
 
-        public List<INode> Nodes { get; } = new List<INode>();
+        private List<INode> nodes { get; } = new List<INode>();
 
-        public List<IEdge> Edges
+        public event GraphChangeEvent Changed;
+
+        public INode this[int index] => nodes[index];
+
+        public IReadOnlyList<INode> Nodes => nodes;
+
+        public IReadOnlyList<IEdge> Edges
         {
             get
             {
-                return Nodes
+                return nodes
                     .SelectMany(n => n.IncidentEdges)
                     .Distinct()
                     .ToList();
             }
         }
 
-        public event GraphChangeEvent Changed;
-
         public INode AddNode()
         {
-            var node = new Node(Nodes.Count);
-            Nodes.Add(node);
+            var node = new Node(numberCounter++);
+            nodes.Add(node);
             Changed?.Invoke();
             return node;
         }
@@ -39,7 +45,7 @@ namespace GraphMaker.Model
                 Node.Disconnect(edge);
             }
 
-            Nodes.Remove(v);
+            nodes.Remove(v);
             Changed?.Invoke();
         }
 

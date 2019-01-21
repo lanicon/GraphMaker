@@ -2,9 +2,9 @@
 {
     public interface IEdge
     {
-        INode First { get; set; }
+        INode First { get; }
 
-        INode Second { get; set; }
+        INode Second { get; }
 
         int Length { get; set; }
 

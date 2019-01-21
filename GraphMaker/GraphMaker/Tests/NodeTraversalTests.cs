@@ -72,7 +72,13 @@ namespace GraphMaker.Tests
         {
             var traversalOrder = K5.DepthSearch();
             traversalOrder[0].Should().Be(node1);
-            traversalOrder.Should().BeEquivalentTo(node1, node2, node3, node4, node5);
+            CollectionAssert.AreEquivalent(traversalOrder, new[]
+            {
+                node1, node2, node3, node4, node5
+            });
+
+            // Этот вариант почему-то работает очень медленно
+            // traversalOrder.Should().BeEquivalentTo(node1, node2, node3, node4, node5);
         }
 
         [Test]
@@ -105,7 +111,10 @@ namespace GraphMaker.Tests
         {
             var traversalOrder = K5.BreadthSearch();
             traversalOrder[0].Should().Be(node1);
-            traversalOrder.Should().BeEquivalentTo(node1, node2, node3, node4, node5);
+            CollectionAssert.AreEquivalent(traversalOrder, new[]
+            {
+                node1, node2, node3, node4, node5
+            });
         }
 
         [Test]

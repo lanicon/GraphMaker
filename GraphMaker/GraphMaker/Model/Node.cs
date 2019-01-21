@@ -4,7 +4,7 @@ using System.Linq;
 namespace GraphMaker.Model
 {
     public class Node : INode
-    {
+    { 
         public Node(int number)
         {
             Number = number;
