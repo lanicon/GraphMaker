@@ -23,8 +23,8 @@ namespace GraphMaker.Model
                     .ToList();
             }
         }
-
-        public static IEdge Connect(INode v1, INode v2)
+        
+        public static IEdge Connect(INode v1, INode v2, int length = 1)
         {
             // Если вершины уже соединены, то просто вернём нужное ребро
             if (v1.IncidentNodes.Contains(v2))
@@ -34,7 +34,7 @@ namespace GraphMaker.Model
                     .First(e => e.First == v1 && e.Second == v2 ||
                                 e.First == v2 && e.Second == v1);
             }
-            var edge = new Edge(v1, v2);
+            var edge = new Edge(v1, v2, length);
             v1.IncidentEdges.Add(edge);
             v2.IncidentEdges.Add(edge);
             return edge;
