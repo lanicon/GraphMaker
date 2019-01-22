@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GraphMaker
+namespace GraphMaker.Extensions
 {
     public static class GraphExtensions
     {

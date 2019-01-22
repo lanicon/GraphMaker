@@ -8,7 +8,7 @@ namespace GraphMaker
     {
         INode AddNode();
 
-        void DeleteNode(INode v);
+        void DeleteNode(INode node);
 
         IEdge AddEdge(INode v1, INode v2, int length);
 
