@@ -1,25 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using GraphMaker.Model;
-
 
 namespace GraphMaker.Extensions
 {
-    public static class GraphExtensions
+    public static partial class GraphExtensions
     {
-        public static List<IEdge> GetShortestPath(this IGraph graph, INode start, INode end)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static List<IEdge> GetMinimumSpanningTree(this IGraph graph)
-        {
-            throw new NotImplementedException();
-        }
-
         private static void StackDFS(Node node, bool[] used)
         {
             Stack<Node> nodes = new Stack<Node>();
@@ -48,7 +33,7 @@ namespace GraphMaker.Extensions
 
             foreach (var node in listOfNodes)
             {
-                if(!used[node.Number])
+                if (!used[node.Number])
                 {
                     ConnectedComponentCount++;
                     StackDFS((Node)node, used);
