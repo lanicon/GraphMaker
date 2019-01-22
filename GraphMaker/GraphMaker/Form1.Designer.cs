@@ -43,9 +43,9 @@
             this.gbRadioButtons = new System.Windows.Forms.GroupBox();
             this.gbNodeSize = new System.Windows.Forms.GroupBox();
             this.gbNodeSizeChange = new System.Windows.Forms.GroupBox();
-            this.cbNodeSizeChange = new System.Windows.Forms.ComboBox();
-            this.nudNodeSizeChange = new System.Windows.Forms.NumericUpDown();
             this.btNodeSizeChange = new System.Windows.Forms.Button();
+            this.nudNodeSizeChange = new System.Windows.Forms.NumericUpDown();
+            this.cbNodeSizeChange = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarNodeSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imDrawSpace)).BeginInit();
             this.msGraphMaker.SuspendLayout();
@@ -196,13 +196,15 @@
             this.gbNodeSizeChange.TabStop = false;
             this.gbNodeSizeChange.Text = "Измение веса ребра";
             // 
-            // cbNodeSizeChange
+            // btNodeSizeChange
             // 
-            this.cbNodeSizeChange.FormattingEnabled = true;
-            this.cbNodeSizeChange.Location = new System.Drawing.Point(6, 19);
-            this.cbNodeSizeChange.Name = "cbNodeSizeChange";
-            this.cbNodeSizeChange.Size = new System.Drawing.Size(121, 21);
-            this.cbNodeSizeChange.TabIndex = 0;
+            this.btNodeSizeChange.BackColor = System.Drawing.Color.White;
+            this.btNodeSizeChange.Location = new System.Drawing.Point(133, 19);
+            this.btNodeSizeChange.Name = "btNodeSizeChange";
+            this.btNodeSizeChange.Size = new System.Drawing.Size(85, 47);
+            this.btNodeSizeChange.TabIndex = 10;
+            this.btNodeSizeChange.Text = "Изменить вес ребра";
+            this.btNodeSizeChange.UseVisualStyleBackColor = false;
             // 
             // nudNodeSizeChange
             // 
@@ -221,15 +223,13 @@
             0,
             0});
             // 
-            // btNodeSizeChange
+            // cbNodeSizeChange
             // 
-            this.btNodeSizeChange.BackColor = System.Drawing.Color.White;
-            this.btNodeSizeChange.Location = new System.Drawing.Point(133, 19);
-            this.btNodeSizeChange.Name = "btNodeSizeChange";
-            this.btNodeSizeChange.Size = new System.Drawing.Size(85, 47);
-            this.btNodeSizeChange.TabIndex = 10;
-            this.btNodeSizeChange.Text = "Изменить вес ребра";
-            this.btNodeSizeChange.UseVisualStyleBackColor = false;
+            this.cbNodeSizeChange.FormattingEnabled = true;
+            this.cbNodeSizeChange.Location = new System.Drawing.Point(6, 19);
+            this.cbNodeSizeChange.Name = "cbNodeSizeChange";
+            this.cbNodeSizeChange.Size = new System.Drawing.Size(121, 21);
+            this.cbNodeSizeChange.TabIndex = 0;
             // 
             // Form1
             // 

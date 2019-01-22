@@ -68,7 +68,7 @@ namespace GraphMaker
         {
             InitializeComponent();
             var node1 = AddNode(100, 100, Color.Black);
-            var node2 = AddNode(200, 200, Color.Black);
+            var node2 = AddNode(200, 100, Color.Black);
             AddEdge(node1, node2, Color.Black);
         }
 
@@ -232,10 +232,30 @@ namespace GraphMaker
 
         private bool pointOnEdge(int x, int y, EdgeInfo edge)
         {
-            var onLine = Math.Abs((x - edge.From.X) / (float) (edge.To.X - edge.From.X) -
-                                  (y - edge.From.Y) / (float) (edge.To.Y - edge.From.Y)) <= 0.1;
-            var onSementX = x <= edge.From.X && x >= edge.To.X || x <= edge.To.X && x >= edge.From.X;
-            var onSementY = y <= edge.From.Y && y >= edge.To.Y || y <= edge.To.Y && y >= edge.From.Y;
+            const float e = 0.1f;
+            var onLine = false;
+            var onSementX = false;
+            var onSementY = false;
+            if (edge.To.X == edge.From.X)
+            {
+                onLine = Math.Abs(x - edge.From.X) <= 1;
+                onSementX = x - edge.From.X <= 5;
+                onSementY = y <= edge.From.Y && y >= edge.To.Y || y <= edge.To.Y && y >= edge.From.Y;
+            }
+            else if (edge.To.Y == edge.From.Y)
+            {
+                onLine = Math.Abs(y - edge.From.Y) <= 10;
+                onSementX = x <= edge.From.X && x >= edge.To.X || x <= edge.To.X && x >= edge.From.X;
+                onSementY = y - edge.From.Y <= 5;
+            }
+            else
+            {
+                onLine = Math.Abs((x - edge.From.X) / (float)(edge.To.X - edge.From.X) -
+                                    (y - edge.From.Y) / (float)(edge.To.Y - edge.From.Y)) <= e;
+
+                onSementX = x <= edge.From.X && x >= edge.To.X || x <= edge.To.X && x >= edge.From.X;
+                onSementY = y <= edge.From.Y && y >= edge.To.Y || y <= edge.To.Y && y >= edge.From.Y;
+            }
             return onLine && onSementX && onSementY;
         }
 
