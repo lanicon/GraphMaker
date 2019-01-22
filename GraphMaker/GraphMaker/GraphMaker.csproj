@@ -59,14 +59,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ConnectedComponents.cs" />
+    <Compile Include="Extensions\MinimumSpanningTree.cs" />
     <Compile Include="Extensions\NodeExtensions.cs" />
+    <Compile Include="Extensions\ShortestPath.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\GraphExtensions.cs" />
     <Compile Include="IEdge.cs" />
     <Compile Include="IGraph.cs" />
     <Compile Include="INode.cs" />
