@@ -104,44 +104,45 @@ namespace GraphMaker
         {
             if (nodesEdgesState == NodesEdges.Nodes)
             {
-                if (mouseOn == NodesEdges.None)
+                switch(mouseOn)
                 {
-                    if (e.Button == MouseButtons.Left)
-                        clickState = ClickStates.Add;
-                }
-                else
-                {
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        clickedNode = selectedNode;
-                        clickState = ClickStates.Move;
-                    }
+                    case NodesEdges.None:
+                        if (e.Button == MouseButtons.Left)
+                            clickState = ClickStates.Add;
+                        break;
+                    case NodesEdges.Nodes:
+                        if (e.Button == MouseButtons.Left)
+                        {
+                            clickedNode = selectedNode;
+                            clickState = ClickStates.Move;
+                        }
 
-                    if (e.Button == MouseButtons.Right)
-                    {
-                        clickedNode = selectedNode;
-                        clickState = ClickStates.Delete;
-                    }
+                        if (e.Button == MouseButtons.Right)
+                        {
+                            clickedNode = selectedNode;
+                            clickState = ClickStates.Delete;
+                        }
+                        break;
                 }
             }
             else
             {
-                if (mouseOn == NodesEdges.Edges)
+                switch(mouseOn)
                 {
-                    if (e.Button == MouseButtons.Right)
-                    {
-                        clickedEdge = selectedEdge;
-                        clickState = ClickStates.Delete;
-                    }
-                }
-                else
-                {
-                    if (mouseOn == NodesEdges.Nodes)
+                    case NodesEdges.Edges:
+                        if (e.Button == MouseButtons.Right)
+                        {
+                            clickedEdge = selectedEdge;
+                            clickState = ClickStates.Delete;
+                        }
+                        break;
+                    case NodesEdges.Nodes:
                         if (e.Button == MouseButtons.Left)
                         {
                             clickedNode = selectedNode;
                             clickState = ClickStates.Add;
                         }
+                        break;
                 }
             }
         }
@@ -272,6 +273,7 @@ namespace GraphMaker
                 bufferGraphics.DrawLine(pen, edgeInfo.From.X, edgeInfo.From.Y, edgeInfo.To.X, edgeInfo.To.Y);
             }
 
+            //в процессе добавления ребра
             if (clickState == ClickStates.Add && nodesEdgesState == NodesEdges.Edges && clickedNode != null)
             {
                 var clickedNodeInfo = nodeInfos[clickedNode];
