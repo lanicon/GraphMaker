@@ -166,9 +166,12 @@ namespace GraphMaker
                     case ClickStates.Add:
                         if (selectedNode != null)
                         {
-                            var newEdge = AddEdge(clickedNode, selectedNode, Color.Black);
-                            if (!cbEdgeSizeChange.Items.Contains(newEdge))
-                                cbEdgeSizeChange.Items.Add(newEdge);
+                            if (selectedNode != clickedNode)
+                            {
+                                var newEdge = AddEdge(clickedNode, selectedNode, Color.Black);
+                                if (!cbEdgeSizeChange.Items.Contains(newEdge))
+                                    cbEdgeSizeChange.Items.Add(newEdge);
+                            }
                         }
                         break;
 
