@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using GraphMaker.Model;
 using NUnit.Framework;
+using GraphMaker.Extensions;
 
 namespace GraphMaker.Tests
 {
