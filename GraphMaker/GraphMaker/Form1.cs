@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using GraphMaker.Model;
+using GraphMaker.Extensions;
 
 namespace GraphMaker
 {
@@ -67,9 +68,6 @@ namespace GraphMaker
         public Form1()
         {
             InitializeComponent();
-            //var node1 = AddNode(100, 100, Color.Black);
-            //var node2 = AddNode(200, 200, Color.Black);
-            //AddEdge(node1, node2, Color.Black);
         }
 
         private INode AddNode(int x, int y, Color color)
@@ -242,8 +240,16 @@ namespace GraphMaker
 
         private bool pointOnEdge(int x, int y, EdgeInfo edge)
         {
-            var onLine = Math.Abs((x - edge.From.X) / (float) (edge.To.X - edge.From.X) -
-                                  (y - edge.From.Y) / (float) (edge.To.Y - edge.From.Y)) <= 0.1;
+            const float e = 0.1f;
+            var onLine = false;
+            if (edge.To.X == edge.From.X)
+                onLine = Math.Abs(x - edge.From.X) <= 1;
+            else if (edge.To.Y == edge.From.Y)
+                onLine = Math.Abs(y - edge.From.Y) <= 1;
+            else
+                onLine = Math.Abs((x - edge.From.X) / (float)(edge.To.X - edge.From.X) -
+                                  (y - edge.From.Y) / (float)(edge.To.Y - edge.From.Y)) <= e;
+
             var onSementX = x <= edge.From.X && x >= edge.To.X || x <= edge.To.X && x >= edge.From.X;
             var onSementY = y <= edge.From.Y && y >= edge.To.Y || y <= edge.To.Y && y >= edge.From.Y;
             return onLine && onSementX && onSementY;
@@ -277,6 +283,16 @@ namespace GraphMaker
                 var changeEdge = (IEdge)cbEdgeSizeChange.SelectedItem;
                 changeEdge.Length = (int)nudEdgeSizeChange.Value;
             }
+        }
+
+        private void RecursiveAlg_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(graph.CCcountRecursiveDFS().ToString() + " компонент(ы) связности");
+        }
+
+        private void StackAlg_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(graph.CCcountStackDFS().ToString() + " компонент(ы) связности");
         }
 
         private void draw()

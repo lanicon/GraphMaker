@@ -34,12 +34,14 @@
             this.rbEdges = new System.Windows.Forms.RadioButton();
             this.msGraphMaker = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.создатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.открытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CreateNewFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveFile = new System.Windows.Forms.ToolStripMenuItem();
             this.нахождениеМинимальногоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.нахождениеКоличестваКомпонентСвязностиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RecursiveAlg = new System.Windows.Forms.ToolStripMenuItem();
+            this.StackAlg = new System.Windows.Forms.ToolStripMenuItem();
             this.gbRadioButtons = new System.Windows.Forms.GroupBox();
             this.gbNodeSize = new System.Windows.Forms.GroupBox();
             this.gbEdgeSizeChange = new System.Windows.Forms.GroupBox();
@@ -120,30 +122,30 @@
             // файлToolStripMenuItem
             // 
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.создатьToolStripMenuItem,
-            this.открытьToolStripMenuItem,
-            this.сохранитьToolStripMenuItem});
+            this.CreateNewFile,
+            this.OpenFile,
+            this.SaveFile});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
             // 
-            // создатьToolStripMenuItem
+            // CreateNewFile
             // 
-            this.создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            this.создатьToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
-            this.создатьToolStripMenuItem.Text = "Создать новый файл";
+            this.CreateNewFile.Name = "CreateNewFile";
+            this.CreateNewFile.Size = new System.Drawing.Size(243, 22);
+            this.CreateNewFile.Text = "Создать новый файл";
             // 
-            // открытьToolStripMenuItem
+            // OpenFile
             // 
-            this.открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
-            this.открытьToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
-            this.открытьToolStripMenuItem.Text = "Открыть существующий файл";
+            this.OpenFile.Name = "OpenFile";
+            this.OpenFile.Size = new System.Drawing.Size(243, 22);
+            this.OpenFile.Text = "Открыть существующий файл";
             // 
-            // сохранитьToolStripMenuItem
+            // SaveFile
             // 
-            this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
-            this.сохранитьToolStripMenuItem.Text = "Сохранить файл";
+            this.SaveFile.Name = "SaveFile";
+            this.SaveFile.Size = new System.Drawing.Size(243, 22);
+            this.SaveFile.Text = "Сохранить файл";
             // 
             // нахождениеМинимальногоToolStripMenuItem
             // 
@@ -159,9 +161,26 @@
             // 
             // нахождениеКоличестваКомпонентСвязностиToolStripMenuItem
             // 
+            this.нахождениеКоличестваКомпонентСвязностиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RecursiveAlg,
+            this.StackAlg});
             this.нахождениеКоличестваКомпонентСвязностиToolStripMenuItem.Name = "нахождениеКоличестваКомпонентСвязностиToolStripMenuItem";
             this.нахождениеКоличестваКомпонентСвязностиToolStripMenuItem.Size = new System.Drawing.Size(275, 20);
             this.нахождениеКоличестваКомпонентСвязностиToolStripMenuItem.Text = "Нахождение количества компонент связности";
+            // 
+            // RecursiveAlg
+            // 
+            this.RecursiveAlg.Name = "RecursiveAlg";
+            this.RecursiveAlg.Size = new System.Drawing.Size(210, 22);
+            this.RecursiveAlg.Text = "Реккурсивный алгоритм";
+            this.RecursiveAlg.Click += new System.EventHandler(this.RecursiveAlg_Click);
+            // 
+            // StackAlg
+            // 
+            this.StackAlg.Name = "StackAlg";
+            this.StackAlg.Size = new System.Drawing.Size(210, 22);
+            this.StackAlg.Text = "Алгоритм на стеке";
+            this.StackAlg.Click += new System.EventHandler(this.StackAlg_Click);
             // 
             // gbRadioButtons
             // 
@@ -270,14 +289,16 @@
         private System.Windows.Forms.ToolStripMenuItem нахождениеМинимальногоToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem нахождениеМинимальногоОстовногоДереваToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem нахождениеКоличестваКомпонентСвязностиToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem создатьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem открытьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CreateNewFile;
+        private System.Windows.Forms.ToolStripMenuItem OpenFile;
+        private System.Windows.Forms.ToolStripMenuItem SaveFile;
         private System.Windows.Forms.GroupBox gbRadioButtons;
         private System.Windows.Forms.GroupBox gbNodeSize;
         private System.Windows.Forms.GroupBox gbEdgeSizeChange;
         private System.Windows.Forms.NumericUpDown nudEdgeSizeChange;
         private System.Windows.Forms.ComboBox cbEdgeSizeChange;
+        private System.Windows.Forms.ToolStripMenuItem RecursiveAlg;
+        private System.Windows.Forms.ToolStripMenuItem StackAlg;
     }
 }
 
