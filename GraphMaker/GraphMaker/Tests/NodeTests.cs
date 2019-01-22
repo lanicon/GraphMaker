@@ -7,7 +7,7 @@ namespace GraphMaker.Tests
     [TestFixture]
     public class NodeTests
     {
-        private INode node1, node2, node3;
+        private Node node1, node2, node3;
 
         [SetUp]
         public void SetUp()

@@ -88,7 +88,8 @@ namespace GraphMaker
 
         private IEdge AddEdge(INode from, INode to, Color color)
         {
-            var edge = graph.AddEdge(from, to);
+            // TODO: change default length
+            var edge = graph.AddEdge(from, to, 1);
 
             edgeInfos[edge] = new EdgeInfo
             {
