@@ -167,15 +167,11 @@ namespace GraphMaker
                         if (selectedNode != null)
                         {
                             var newEdge = AddEdge(clickedNode, selectedNode, Color.Black);
-                            if (!cbEdgeSizeChange.Items.Contains(newEdge))
-                                cbEdgeSizeChange.Items.Add(newEdge);
                         }
                         break;
 
                     case ClickStates.Delete:
-                        {
-                            cbEdgeSizeChange.Items.Remove(clickedEdge);
-                            nudEdgeSizeChange.Value = 1;
+                        {  
                             graph.DeleteEdge(clickedEdge);
                         }
                         break;
@@ -183,6 +179,11 @@ namespace GraphMaker
             clickedNode = null;
             clickedEdge = null;
             clickState = ClickStates.NoClick;
+            cbEdgeSizeChange.Items.Clear();
+            foreach (var edge in graph.Edges)
+                cbEdgeSizeChange.Items.Add(edge);
+            if (cbEdgeSizeChange.SelectedIndex == -1)
+                nudEdgeSizeChange.Value = 1;
             draw();
         }
 
@@ -190,7 +191,6 @@ namespace GraphMaker
         {
             x = e.X;
             y = e.Y;
-            //tbXY.Text=$"{x}:{y}";
 
             if (clickState == ClickStates.Move)
             {
@@ -260,11 +260,6 @@ namespace GraphMaker
             draw();
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-            nodesEdgesState = NodesEdges.Nodes;
-        }
-
         private void rbEdges_CheckedChanged(object sender, EventArgs e)
         {
             nodesEdgesState = NodesEdges.Edges;
@@ -293,6 +288,11 @@ namespace GraphMaker
         private void StackAlg_Click(object sender, EventArgs e)
         {
             MessageBox.Show(graph.CCcountStackDFS().ToString() + " компонент(ы) связности");
+        }
+
+        private void rbNodes_CheckedChanged(object sender, EventArgs e)
+        {
+            nodesEdgesState = NodesEdges.Nodes;
         }
 
         private void draw()

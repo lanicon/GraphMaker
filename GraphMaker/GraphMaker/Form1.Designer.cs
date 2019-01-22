@@ -93,7 +93,7 @@
             this.rbNodes.TabStop = true;
             this.rbNodes.Text = "Nodes";
             this.rbNodes.UseVisualStyleBackColor = true;
-            this.rbNodes.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.rbNodes.CheckedChanged += new System.EventHandler(this.rbNodes_CheckedChanged);
             // 
             // rbEdges
             // 
