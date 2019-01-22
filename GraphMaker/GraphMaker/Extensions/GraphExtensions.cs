@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-<<<<<<< core:GraphMaker/GraphMaker/Extensions/GraphExtensions.cs
-=======
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GraphMaker.Model;
->>>>>>> Add CCC Algorithms:GraphMaker/GraphMaker/GraphExtensions.cs
+
 
 namespace GraphMaker.Extensions
 {
