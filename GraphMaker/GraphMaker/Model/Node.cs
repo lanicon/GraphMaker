@@ -24,19 +24,19 @@ namespace GraphMaker.Model
             }
         }
         
-        public static IEdge Connect(INode v1, INode v2, int length = 1)
+        public static IEdge Connect(INode node1, INode node2, int length = 1)
         {
             // Если вершины уже соединены, то просто вернём нужное ребро
-            if (v1.IncidentNodes.Contains(v2))
+            if (node1.IncidentNodes.Contains(node2))
             {
-                return v1
+                return node1
                     .IncidentEdges
-                    .First(e => e.First == v1 && e.Second == v2 ||
-                                e.First == v2 && e.Second == v1);
+                    .First(e => e.First == node1 && e.Second == node2 ||
+                                e.First == node2 && e.Second == node1);
             }
-            var edge = new Edge(v1, v2, length);
-            v1.IncidentEdges.Add(edge);
-            v2.IncidentEdges.Add(edge);
+            var edge = new Edge(node1, node2, length);
+            node1.IncidentEdges.Add(edge);
+            node2.IncidentEdges.Add(edge);
             return edge;
         }
 
