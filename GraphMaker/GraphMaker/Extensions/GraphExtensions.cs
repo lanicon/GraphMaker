@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GraphMaker
+namespace GraphMaker.Extensions
 {
     public static class GraphExtensions
     {
-        public static List<IEdge> MinPath(this IGraph graph, INode v1, INode v2)
+        public static List<IEdge> GetShortestPath(this IGraph graph, INode start, INode end)
         {
             throw new NotImplementedException();
         }
 
-        public static List<IEdge> MST(this IGraph graph)
+        public static List<IEdge> GetMinimumSpanningTree(this IGraph graph)
         {
             throw new NotImplementedException();
         }
 
-        public static int CCcount(this IGraph graph)
+        public static int GetConnectedComponentsNumber(this IGraph graph)
         {
             throw new NotImplementedException();
         }

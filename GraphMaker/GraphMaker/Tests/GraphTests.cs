@@ -8,7 +8,7 @@ namespace GraphMaker.Tests
     [TestFixture]
     public class GraphTests
     {
-        private IGraph graph;
+        private Graph graph;
 
         [SetUp]
         public void SetUp()
