@@ -164,16 +164,12 @@ namespace GraphMaker
                 switch (clickState)
                 {
                     case ClickStates.Add:
-                        if (selectedNode != null)
-                        {
-                            var newEdge = AddEdge(clickedNode, selectedNode, Color.Black);
-                        }
+                        if (selectedNode != null && selectedNode != clickedNode)
+                            AddEdge(clickedNode, selectedNode, Color.Black);
                         break;
 
                     case ClickStates.Delete:
-                        {  
                             graph.DeleteEdge(clickedEdge);
-                        }
                         break;
                 }
             clickedNode = null;
