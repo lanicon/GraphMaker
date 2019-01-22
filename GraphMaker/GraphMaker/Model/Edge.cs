@@ -40,5 +40,10 @@ namespace GraphMaker.Model
         {
             return node == First || node == Second;
         }
+
+        public override string ToString()
+        {
+            return $"{First.Number}<->{Second.Number}";
+        }
     }
 }

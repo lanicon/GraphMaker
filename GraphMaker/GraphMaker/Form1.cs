@@ -67,9 +67,9 @@ namespace GraphMaker
         public Form1()
         {
             InitializeComponent();
-            var node1 = AddNode(100, 100, Color.Black);
-            var node2 = AddNode(200, 200, Color.Black);
-            AddEdge(node1, node2, Color.Black);
+            //var node1 = AddNode(100, 100, Color.Black);
+            //var node2 = AddNode(200, 200, Color.Black);
+            //AddEdge(node1, node2, Color.Black);
         }
 
         private INode AddNode(int x, int y, Color color)
@@ -166,10 +166,20 @@ namespace GraphMaker
                 switch (clickState)
                 {
                     case ClickStates.Add:
-                        if (selectedNode != null) AddEdge(clickedNode, selectedNode, Color.Black);
+                        if (selectedNode != null)
+                        {
+                            var newEdge = AddEdge(clickedNode, selectedNode, Color.Black);
+                            if (!cbEdgeSizeChange.Items.Contains(newEdge))
+                                cbEdgeSizeChange.Items.Add(newEdge);
+                        }
                         break;
+
                     case ClickStates.Delete:
-                        graph.DeleteEdge(clickedEdge);
+                        {
+                            cbEdgeSizeChange.Items.Remove(clickedEdge);
+                            nudEdgeSizeChange.Value = 1;
+                            graph.DeleteEdge(clickedEdge);
+                        }
                         break;
                 }
             clickedNode = null;
@@ -244,7 +254,6 @@ namespace GraphMaker
             draw();
         }
 
-
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             nodesEdgesState = NodesEdges.Nodes;
@@ -253,6 +262,21 @@ namespace GraphMaker
         private void rbEdges_CheckedChanged(object sender, EventArgs e)
         {
             nodesEdgesState = NodesEdges.Edges;
+        }
+
+        private void cbEdgeSizeChange_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbEdgeSizeChange.SelectedItem != null)
+                nudEdgeSizeChange.Value = ((IEdge)cbEdgeSizeChange.SelectedItem).Length;
+        }
+
+        private void nudEdgeSizeChange_ValueChanged(object sender, EventArgs e)
+        {
+            if (cbEdgeSizeChange.SelectedItem != null)
+            {
+                var changeEdge = (IEdge)cbEdgeSizeChange.SelectedItem;
+                changeEdge.Length = (int)nudEdgeSizeChange.Value;
+            }
         }
 
         private void draw()

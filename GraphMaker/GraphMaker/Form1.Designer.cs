@@ -42,17 +42,16 @@
             this.нахождениеКоличестваКомпонентСвязностиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbRadioButtons = new System.Windows.Forms.GroupBox();
             this.gbNodeSize = new System.Windows.Forms.GroupBox();
-            this.gbNodeSizeChange = new System.Windows.Forms.GroupBox();
-            this.cbNodeSizeChange = new System.Windows.Forms.ComboBox();
-            this.nudNodeSizeChange = new System.Windows.Forms.NumericUpDown();
-            this.btNodeSizeChange = new System.Windows.Forms.Button();
+            this.gbEdgeSizeChange = new System.Windows.Forms.GroupBox();
+            this.nudEdgeSizeChange = new System.Windows.Forms.NumericUpDown();
+            this.cbEdgeSizeChange = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarNodeSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imDrawSpace)).BeginInit();
             this.msGraphMaker.SuspendLayout();
             this.gbRadioButtons.SuspendLayout();
             this.gbNodeSize.SuspendLayout();
-            this.gbNodeSizeChange.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudNodeSizeChange)).BeginInit();
+            this.gbEdgeSizeChange.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEdgeSizeChange)).BeginInit();
             this.SuspendLayout();
             // 
             // trackBarNodeSize
@@ -184,52 +183,52 @@
             this.gbNodeSize.TabStop = false;
             this.gbNodeSize.Text = "Размер вершин";
             // 
-            // gbNodeSizeChange
+            // gbEdgeSizeChange
             // 
-            this.gbNodeSizeChange.Controls.Add(this.btNodeSizeChange);
-            this.gbNodeSizeChange.Controls.Add(this.nudNodeSizeChange);
-            this.gbNodeSizeChange.Controls.Add(this.cbNodeSizeChange);
-            this.gbNodeSizeChange.Location = new System.Drawing.Point(211, 27);
-            this.gbNodeSizeChange.Name = "gbNodeSizeChange";
-            this.gbNodeSizeChange.Size = new System.Drawing.Size(224, 78);
-            this.gbNodeSizeChange.TabIndex = 8;
-            this.gbNodeSizeChange.TabStop = false;
-            this.gbNodeSizeChange.Text = "Измение веса ребра";
+            this.gbEdgeSizeChange.Controls.Add(this.nudEdgeSizeChange);
+            this.gbEdgeSizeChange.Controls.Add(this.cbEdgeSizeChange);
+            this.gbEdgeSizeChange.Location = new System.Drawing.Point(211, 27);
+            this.gbEdgeSizeChange.Name = "gbEdgeSizeChange";
+            this.gbEdgeSizeChange.Size = new System.Drawing.Size(142, 78);
+            this.gbEdgeSizeChange.TabIndex = 8;
+            this.gbEdgeSizeChange.TabStop = false;
+            this.gbEdgeSizeChange.Text = "Измение веса ребра";
             // 
-            // cbNodeSizeChange
+            // nudEdgeSizeChange
             // 
-            this.cbNodeSizeChange.FormattingEnabled = true;
-            this.cbNodeSizeChange.Location = new System.Drawing.Point(6, 19);
-            this.cbNodeSizeChange.Name = "cbNodeSizeChange";
-            this.cbNodeSizeChange.Size = new System.Drawing.Size(121, 21);
-            this.cbNodeSizeChange.TabIndex = 0;
-            // 
-            // nudNodeSizeChange
-            // 
-            this.nudNodeSizeChange.Location = new System.Drawing.Point(7, 46);
-            this.nudNodeSizeChange.Minimum = new decimal(new int[] {
+            this.nudEdgeSizeChange.Location = new System.Drawing.Point(6, 46);
+            this.nudEdgeSizeChange.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudEdgeSizeChange.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.nudNodeSizeChange.Name = "nudNodeSizeChange";
-            this.nudNodeSizeChange.Size = new System.Drawing.Size(120, 20);
-            this.nudNodeSizeChange.TabIndex = 10;
-            this.nudNodeSizeChange.Value = new decimal(new int[] {
+            this.nudEdgeSizeChange.Name = "nudEdgeSizeChange";
+            this.nudEdgeSizeChange.Size = new System.Drawing.Size(120, 20);
+            this.nudEdgeSizeChange.TabIndex = 10;
+            this.nudEdgeSizeChange.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
+            this.nudEdgeSizeChange.ValueChanged += new System.EventHandler(this.nudEdgeSizeChange_ValueChanged);
             // 
-            // btNodeSizeChange
+            // cbEdgeSizeChange
             // 
-            this.btNodeSizeChange.BackColor = System.Drawing.Color.White;
-            this.btNodeSizeChange.Location = new System.Drawing.Point(133, 19);
-            this.btNodeSizeChange.Name = "btNodeSizeChange";
-            this.btNodeSizeChange.Size = new System.Drawing.Size(85, 47);
-            this.btNodeSizeChange.TabIndex = 10;
-            this.btNodeSizeChange.Text = "Изменить вес ребра";
-            this.btNodeSizeChange.UseVisualStyleBackColor = false;
+            this.cbEdgeSizeChange.DropDownHeight = 42;
+            this.cbEdgeSizeChange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbEdgeSizeChange.FormattingEnabled = true;
+            this.cbEdgeSizeChange.IntegralHeight = false;
+            this.cbEdgeSizeChange.ItemHeight = 13;
+            this.cbEdgeSizeChange.Location = new System.Drawing.Point(6, 19);
+            this.cbEdgeSizeChange.Name = "cbEdgeSizeChange";
+            this.cbEdgeSizeChange.Size = new System.Drawing.Size(121, 21);
+            this.cbEdgeSizeChange.TabIndex = 0;
+            this.cbEdgeSizeChange.SelectedIndexChanged += new System.EventHandler(this.cbEdgeSizeChange_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -237,7 +236,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(850, 553);
-            this.Controls.Add(this.gbNodeSizeChange);
+            this.Controls.Add(this.gbEdgeSizeChange);
             this.Controls.Add(this.gbNodeSize);
             this.Controls.Add(this.gbRadioButtons);
             this.Controls.Add(this.imDrawSpace);
@@ -254,8 +253,8 @@
             this.gbRadioButtons.PerformLayout();
             this.gbNodeSize.ResumeLayout(false);
             this.gbNodeSize.PerformLayout();
-            this.gbNodeSizeChange.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudNodeSizeChange)).EndInit();
+            this.gbEdgeSizeChange.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudEdgeSizeChange)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -276,10 +275,9 @@
         private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem;
         private System.Windows.Forms.GroupBox gbRadioButtons;
         private System.Windows.Forms.GroupBox gbNodeSize;
-        private System.Windows.Forms.GroupBox gbNodeSizeChange;
-        private System.Windows.Forms.Button btNodeSizeChange;
-        private System.Windows.Forms.NumericUpDown nudNodeSizeChange;
-        private System.Windows.Forms.ComboBox cbNodeSizeChange;
+        private System.Windows.Forms.GroupBox gbEdgeSizeChange;
+        private System.Windows.Forms.NumericUpDown nudEdgeSizeChange;
+        private System.Windows.Forms.ComboBox cbEdgeSizeChange;
     }
 }
 
