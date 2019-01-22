@@ -242,16 +242,28 @@ namespace GraphMaker
         {
             const float e = 0.1f;
             var onLine = false;
+            var onSementX = false;
+            var onSementY = false;
             if (edge.To.X == edge.From.X)
+            {
                 onLine = Math.Abs(x - edge.From.X) <= 1;
+                onSementX = x - edge.From.X <= 5;
+                onSementY = y <= edge.From.Y && y >= edge.To.Y || y <= edge.To.Y && y >= edge.From.Y;
+            }
             else if (edge.To.Y == edge.From.Y)
-                onLine = Math.Abs(y - edge.From.Y) <= 1;
+            {
+                onLine = Math.Abs(y - edge.From.Y) <= 10;
+                onSementX = x <= edge.From.X && x >= edge.To.X || x <= edge.To.X && x >= edge.From.X;
+                onSementY = y - edge.From.Y <= 5;
+            }
             else
+            {
                 onLine = Math.Abs((x - edge.From.X) / (float)(edge.To.X - edge.From.X) -
-                                  (y - edge.From.Y) / (float)(edge.To.Y - edge.From.Y)) <= e;
+                                    (y - edge.From.Y) / (float)(edge.To.Y - edge.From.Y)) <= e;
 
-            var onSementX = x <= edge.From.X && x >= edge.To.X || x <= edge.To.X && x >= edge.From.X;
-            var onSementY = y <= edge.From.Y && y >= edge.To.Y || y <= edge.To.Y && y >= edge.From.Y;
+                onSementX = x <= edge.From.X && x >= edge.To.X || x <= edge.To.X && x >= edge.From.X;
+                onSementY = y <= edge.From.Y && y >= edge.To.Y || y <= edge.To.Y && y >= edge.From.Y;
+            }
             return onLine && onSementX && onSementY;
         }
 
