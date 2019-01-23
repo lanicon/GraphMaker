@@ -1,131 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
-using GraphMaker.Model;
+﻿using GraphMaker.Model;
 using NUnit.Framework;
 using GraphMaker.Extensions;
 
 namespace GraphMaker.Tests
 {
     [TestFixture]
-    class ConnectedComponentsCountTests
+    public class ConnectedComponentsCountTests
     {
-        [Test]
-        public void TestRecursiveDFS_TwoCC()
+        private const int DefaultLength = 1;
+
+        private IGraph MakeGraph(int nodesCount, params (int First, int Second)[] incidentEdges)
         {
             IGraph graph = new Graph();
-            int defaultLength = 3;
-            const int nodeCount = 6;
-            for (int i = 0; i < nodeCount; i++)
+
+            for (var i = 0; i < nodesCount; i++)
+            {
                 graph.AddNode();
+            }
+
             var nodes = graph.Nodes;
-            graph.AddEdge(nodes[0], nodes[1], defaultLength);
-            graph.AddEdge(nodes[1], nodes[2], defaultLength);
-            graph.AddEdge(nodes[1], nodes[3], defaultLength);
-            graph.AddEdge(nodes[4], nodes[5], defaultLength);
+            foreach (var edge in incidentEdges)
+            {
+                var first = nodes[edge.First];
+                var second = nodes[edge.Second];
+                graph.AddEdge(first, second, DefaultLength);
+            }
 
-
-            var actual = graph.CCcountRecursiveDFS();
-            int expected = 2;
-            Assert.AreEqual(expected, actual);
+            return graph;
         }
 
-        [Test]
-        public void TestRecursiveDFS_ThreeCC()
+        [Test, TestCaseSource(typeof(TestsFactory), nameof(TestsFactory.TestCases))]
+        public void Test(
+            int nodesCount,
+            (int First, int Second)[] incidentEdges,
+            int expectedCount)
         {
-            IGraph graph = new Graph();
-            int defaultLength = 3;
-            const int nodeCount = 7;
-            for (int i = 0; i < nodeCount; i++)
-                graph.AddNode();
-            var nodes = graph.Nodes;
-            graph.AddEdge(nodes[0], nodes[1], defaultLength);
-            graph.AddEdge(nodes[1], nodes[2], defaultLength);
-            graph.AddEdge(nodes[1], nodes[3], defaultLength);
-            graph.AddEdge(nodes[4], nodes[5], defaultLength);
+            var graph = MakeGraph(nodesCount, incidentEdges);
 
+            var actualStackCount = graph.CCcountStackDFS();
+            Assert.AreEqual(expectedCount, actualStackCount, "CCcountStackDFS");
 
-            var actual = graph.CCcountRecursiveDFS();
-            int expected = 3;
-            Assert.AreEqual(expected, actual);
+            var actualRecursiveCount = graph.CCcountRecursiveDFS();
+            Assert.AreEqual(expectedCount, actualRecursiveCount, "CCcountRecursiveDFS");
         }
 
-        [Test]
-        public void TestStackDFS_TwoCC()
+        private class TestsFactory
         {
-            IGraph graph = new Graph();
-            int defaultLength = 3;
-            const int nodeCount = 6;
-            for (int i = 0; i < nodeCount; i++)
-                graph.AddNode();
-            var nodes = graph.Nodes;
-            graph.AddEdge(nodes[0], nodes[1], defaultLength);
-            graph.AddEdge(nodes[1], nodes[2], defaultLength);
-            graph.AddEdge(nodes[1], nodes[3], defaultLength);
-            graph.AddEdge(nodes[4], nodes[5], defaultLength);
-
-
-            var actual = graph.CCcountStackDFS();
-            int expected = 2;
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void TestStackDFS_ThreeCC()
-        {
-            IGraph graph = new Graph();
-            int defaultLength = 3;
-            const int nodeCount = 7;
-            for (int i = 0; i < nodeCount; i++)
-                graph.AddNode();
-            var nodes = graph.Nodes;
-            graph.AddEdge(nodes[0], nodes[1], defaultLength);
-            graph.AddEdge(nodes[1], nodes[2], defaultLength);
-            graph.AddEdge(nodes[1], nodes[3], defaultLength);
-            graph.AddEdge(nodes[4], nodes[5], defaultLength);
-
-
-            var actual = graph.CCcountStackDFS();
-            int expected = 3;
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void TestStackDFS_SevenCC()
-        {
-            IGraph graph = new Graph();
-            const int nodeCount = 7;
-            for (int i = 0; i < nodeCount; i++)
-                graph.AddNode();
-
-            var actual = graph.CCcountStackDFS();
-            int expected = 7;
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void TestStackDFS_ZeroCC()
-        {
-            IGraph graph = new Graph();
-            var nodes = graph.Nodes;
-
-            var actual = graph.CCcountStackDFS();
-            int expected = 0;
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void TestRecursiveDFS_ZeroCC()
-        {
-            IGraph graph = new Graph();
-            var nodes = graph.Nodes;
-
-            var actual = graph.CCcountRecursiveDFS();
-            int expected = 0;
-            Assert.AreEqual(expected, actual);
+            public static TestCaseData[] TestCases => new[]
+            {
+                new TestCaseData(0, new (int, int)[0], 0),
+                new TestCaseData(1, new (int, int)[0], 1), 
+                new TestCaseData(6, new[] {(0, 1), (1, 2), (1, 3), (4, 5)}, 2),
+                new TestCaseData(7, new[] {(0, 1), (1, 2), (1, 3), (4, 5)}, 3),
+                new TestCaseData(7, new (int, int)[0], 7),
+                new TestCaseData(4, new[] {(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)}, 1), 
+            };
         }
     }
 }
