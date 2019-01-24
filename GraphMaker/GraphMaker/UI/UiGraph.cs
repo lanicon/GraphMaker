@@ -63,8 +63,8 @@ namespace GraphMaker.UI
 
             edgeInfos[edge] = new EdgeInfo
             {
-                From = nodeInfos[first],
-                To = nodeInfos[second],
+                First = nodeInfos[first],
+                Second = nodeInfos[second],
                 Color = color
             };
 
