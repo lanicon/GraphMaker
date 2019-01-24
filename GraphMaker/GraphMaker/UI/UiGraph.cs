@@ -24,9 +24,9 @@ namespace GraphMaker.UI
 
         public event GraphChangeEvent Changed;
 
-        public IReadOnlyList<INode> Nodes => graph.Nodes;
+        public IReadOnlyList<INode> Nodes => this.graph.Nodes;
 
-        public IReadOnlyList<IEdge> Edges => graph.Edges;
+        public IReadOnlyList<IEdge> Edges => this.graph.Edges;
 
         public EdgeInfo GetEdgeInfo(IEdge edge) => edgeInfos[edge];
 
@@ -45,7 +45,7 @@ namespace GraphMaker.UI
 
         public INode AddNode(int x, int y, Color color)
         {
-            var node = graph.AddNode();
+            var node = this.graph.AddNode();
 
             nodeInfos[node] = new NodeInfo
             {
@@ -59,7 +59,7 @@ namespace GraphMaker.UI
 
         public IEdge AddEdge(INode first, INode second, int length, Color color)
         {
-            var edge = graph.AddEdge(first, second, length);
+            var edge = this.graph.AddEdge(first, second, length);
 
             edgeInfos[edge] = new EdgeInfo
             {
@@ -83,12 +83,12 @@ namespace GraphMaker.UI
 
         public void DeleteNode(INode node)
         {
-            graph.DeleteNode(node);
+            this.graph.DeleteNode(node);
         }
 
         public void DeleteEdge(IEdge edge)
         {
-            graph.DeleteEdge(edge);
+            this.graph.DeleteEdge(edge);
         }
     }
 }
