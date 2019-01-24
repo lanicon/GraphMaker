@@ -34,9 +34,19 @@ namespace GraphMaker.UI
 
         public UiGraph(Type graphType)
         {
+            if (graphType == typeof(UiGraph))
+            {
+                throw new ArgumentException("type should not be UiGraph");
+            }
+
             if (!graphType.GetInterfaces().Contains(typeof(IGraph)))
             {
-                throw new ArgumentException(nameof(graphType));
+                throw new ArgumentException("type must implement IGraph interface");
+            }
+
+            if (graphType.GetConstructor(Type.EmptyTypes) == null)
+            {
+                throw new ArgumentException("type must have a default constructor");
             }
 
             this.graph = (IGraph)Activator.CreateInstance(graphType);
