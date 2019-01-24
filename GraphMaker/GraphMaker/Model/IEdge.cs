@@ -1,4 +1,4 @@
-﻿namespace GraphMaker
+﻿namespace GraphMaker.Model
 {
     public interface IEdge
     {

@@ -54,9 +54,9 @@ namespace GraphMaker.Model
             OnChanged();
         }
 
-        public IEdge AddEdge(INode node1, INode node2, int length = 1)
+        public IEdge AddEdge(INode first, INode second, int length = 1)
         {
-            var edge = Node.Connect(node1, node2, length);
+            var edge = Node.Connect(first, second, length);
             OnChanged();
             return edge;
         }

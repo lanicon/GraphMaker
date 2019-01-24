@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GraphMaker
+namespace GraphMaker.Model
 {
     public delegate void GraphChangeEvent();
 
@@ -10,7 +10,7 @@ namespace GraphMaker
 
         void DeleteNode(INode node);
 
-        IEdge AddEdge(INode v1, INode v2, int length);
+        IEdge AddEdge(INode first, INode second, int length);
 
         void DeleteEdge(IEdge edge);
 

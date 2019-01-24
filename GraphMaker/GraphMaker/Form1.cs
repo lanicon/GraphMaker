@@ -4,30 +4,12 @@ using System.Drawing;
 using System.Windows.Forms;
 using GraphMaker.Model;
 using GraphMaker.Extensions;
+using GraphMaker.UI;
 
 namespace GraphMaker
 {
     public partial class Form1 : Form
     {
-        private class NodeInfo
-        {
-            public int X { get; set; }
-
-            public int Y { get; set; }
-
-            public Color Color { get; set; }
-        }
-
-        private class EdgeInfo
-        {
-            public NodeInfo From { get; set; }
-
-            public NodeInfo To { get; set; }
-
-            public Color Color { get; set; }
-        }
-
-
         private enum NodesEdges
         {
             Nodes,
@@ -43,11 +25,9 @@ namespace GraphMaker
             NoClick
         }
 
-        private readonly IGraph graph = new Graph();
+        private const int DefaultLength = 1;
 
-        private readonly Dictionary<IEdge, EdgeInfo> edgeInfos = new Dictionary<IEdge, EdgeInfo>();
-
-        private readonly Dictionary<INode, NodeInfo> nodeInfos = new Dictionary<INode, NodeInfo>();
+        private readonly UiGraph graph = new UiGraph(typeof(Graph));
 
         private ClickStates clickState = ClickStates.NoClick;
 
@@ -68,35 +48,6 @@ namespace GraphMaker
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private INode AddNode(int x, int y, Color color)
-        {
-            var node = graph.AddNode();
-
-            nodeInfos[node] = new NodeInfo
-            {
-                Color = color,
-                X = x,
-                Y = y
-            };
-
-            return node;
-        }
-
-        private IEdge AddEdge(INode from, INode to, Color color)
-        {
-            // TODO: change default length
-            var edge = graph.AddEdge(from, to, 1);
-
-            edgeInfos[edge] = new EdgeInfo
-            {
-                From = nodeInfos[from],
-                To = nodeInfos[to],
-                Color = color
-            };
-
-            return edge;
         }
 
         private void imDrawSpace_MouseDown(object sender, MouseEventArgs e)
@@ -152,7 +103,7 @@ namespace GraphMaker
                 switch (clickState)
                 {
                     case ClickStates.Add:
-                        clickedNode = AddNode(x, y, Color.Black);
+                        clickedNode = graph.AddNode(x, y, Color.Black);
                         break;
                     case ClickStates.Delete:
                         if (clickedNode != null) graph.DeleteNode(clickedNode);
@@ -165,7 +116,7 @@ namespace GraphMaker
                 {
                     case ClickStates.Add:
                         if (selectedNode != null && selectedNode != clickedNode)
-                            AddEdge(clickedNode, selectedNode, Color.Black);
+                            graph.AddEdge(clickedNode, selectedNode, DefaultLength, Color.Black);
                         break;
 
                     case ClickStates.Delete:
@@ -190,7 +141,7 @@ namespace GraphMaker
 
             if (clickState == ClickStates.Move)
             {
-                var nodeInfo = nodeInfos[clickedNode];
+                var nodeInfo = graph.GetNodeInfo(clickedNode);
                 nodeInfo.X = x;
                 nodeInfo.Y = y;
                 draw();
@@ -203,7 +154,7 @@ namespace GraphMaker
             mouseOn = NodesEdges.None;
             foreach (var node in graph.Nodes)
             {
-                var nodeInfo = nodeInfos[node];
+                var nodeInfo = graph.GetNodeInfo(node);
                 if (Math.Abs(nodeInfo.X - x) < size / 2 && Math.Abs(nodeInfo.Y - y) < size / 2 && selectedNode == null)
                 {
                     mouseOn = NodesEdges.Nodes;
@@ -218,7 +169,7 @@ namespace GraphMaker
 
             foreach (var edge in graph.Edges)
             {
-                var edgeInfo = edgeInfos[edge];
+                var edgeInfo = graph.GetEdgeInfo(edge);
                 if (pointOnEdge(x, y, edgeInfo) && mouseOn != NodesEdges.Nodes)
                 {
                     edgeInfo.Color = Color.Red;
@@ -310,14 +261,14 @@ namespace GraphMaker
             var size = trackBarNodeSize.Value;
             foreach (var node in graph.Nodes)
             {
-                var nodeInfo = nodeInfos[node];
+                var nodeInfo = graph.GetNodeInfo(node);
                 var pen = new Pen(nodeInfo.Color);
                 bufferGraphics.DrawEllipse(pen, nodeInfo.X - size / 2, nodeInfo.Y - size / 2, size, size);
             }
 
             foreach (var edge in graph.Edges)
             {
-                var edgeInfo = edgeInfos[edge];
+                var edgeInfo = graph.GetEdgeInfo(edge);
                 var pen = new Pen(edgeInfo.Color);
                 bufferGraphics.DrawLine(pen, edgeInfo.From.X, edgeInfo.From.Y, edgeInfo.To.X, edgeInfo.To.Y);
             }
@@ -325,7 +276,7 @@ namespace GraphMaker
             //в процессе добавления ребра
             if (clickState == ClickStates.Add && nodesEdgesState == NodesEdges.Edges && clickedNode != null)
             {
-                var clickedNodeInfo = nodeInfos[clickedNode];
+                var clickedNodeInfo = graph.GetNodeInfo(clickedNode);
                 var pen = new Pen(Color.Black);
                 bufferGraphics.DrawLine(pen, clickedNodeInfo.X, clickedNodeInfo.Y, x, y);
             }

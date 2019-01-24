@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GraphMaker
+namespace GraphMaker.Model
 {
     public interface INode
     {

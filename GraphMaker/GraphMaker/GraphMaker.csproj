@@ -40,6 +40,9 @@
     <Reference Include="FluentAssertions, Version=5.6.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.5.6.0\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -69,19 +72,23 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="IEdge.cs" />
-    <Compile Include="IGraph.cs" />
-    <Compile Include="INode.cs" />
+    <Compile Include="Model\IEdge.cs" />
+    <Compile Include="Model\IGraph.cs" />
+    <Compile Include="Model\INode.cs" />
     <Compile Include="Model\Edge.cs" />
     <Compile Include="Model\Graph.cs" />
     <Compile Include="Model\Node.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IGraphRepository.cs" />
     <Compile Include="Tests\ConnectedComponentsCountTests.cs" />
     <Compile Include="Tests\EdgeTests.cs" />
     <Compile Include="Tests\GraphTests.cs" />
     <Compile Include="Tests\NodeTests.cs" />
     <Compile Include="Tests\NodeTraversalTests.cs" />
+    <Compile Include="UI\EdgeInfo.cs" />
+    <Compile Include="UI\NodeInfo.cs" />
+    <Compile Include="UI\UiGraph.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
