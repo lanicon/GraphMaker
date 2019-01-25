@@ -28,9 +28,9 @@ namespace GraphMaker.UI
 
         public IReadOnlyList<IEdge> Edges => this.graph.Edges;
 
-        public EdgeInfo GetEdgeInfo(IEdge edge) => edgeInfos[edge];
+        public IReadOnlyDictionary<IEdge, EdgeInfo> EdgeInfos => edgeInfos;
 
-        public NodeInfo GetNodeInfo(INode node) => nodeInfos[node];
+        public IReadOnlyDictionary<INode, NodeInfo> NodeInfos => nodeInfos;
 
         public UiGraph(Type graphType)
         {

@@ -139,7 +139,7 @@ namespace GraphMaker
 
             if (clickState == ClickStates.Move)
             {
-                var nodeInfo = graph.GetNodeInfo(clickedNode);
+                var nodeInfo = graph.NodeInfos[clickedNode];
                 nodeInfo.X = x;
                 nodeInfo.Y = y;
                 draw();
@@ -152,7 +152,7 @@ namespace GraphMaker
             mouseOn = NodesEdges.None;
             foreach (var node in graph.Nodes)
             {
-                var nodeInfo = graph.GetNodeInfo(node);
+                var nodeInfo = graph.NodeInfos[node];
                 if (Math.Abs(nodeInfo.X - x) < size / 2 && Math.Abs(nodeInfo.Y - y) < size / 2 && selectedNode == null)
                 {
                     mouseOn = NodesEdges.Nodes;
@@ -167,7 +167,7 @@ namespace GraphMaker
 
             foreach (var edge in graph.Edges)
             {
-                var edgeInfo = graph.GetEdgeInfo(edge);
+                var edgeInfo = graph.EdgeInfos[edge];
                 if (pointOnEdge(x, y, edgeInfo) && mouseOn != NodesEdges.Nodes)
                 {
                     edgeInfo.Color = Color.Red;
@@ -260,14 +260,14 @@ namespace GraphMaker
             var size = trackBarNodeSize.Value;
             foreach (var node in graph.Nodes)
             {
-                var nodeInfo = graph.GetNodeInfo(node);
+                var nodeInfo = graph.NodeInfos[node];
                 var pen = new Pen(nodeInfo.Color);
                 bufferGraphics.DrawEllipse(pen, nodeInfo.X - size / 2, nodeInfo.Y - size / 2, size, size);
             }
 
             foreach (var edge in graph.Edges)
             {
-                var edgeInfo = graph.GetEdgeInfo(edge);
+                var edgeInfo = graph.EdgeInfos[edge];
                 var pen = new Pen(edgeInfo.Color);
                 bufferGraphics.DrawLine(pen, edgeInfo.First.X, edgeInfo.First.Y, edgeInfo.Second.X, edgeInfo.Second.Y);
             }
@@ -275,7 +275,7 @@ namespace GraphMaker
             //в процессе добавления ребра
             if (clickState == ClickStates.Add && nodesEdgesState == NodesEdges.Edges && clickedNode != null)
             {
-                var clickedNodeInfo = graph.GetNodeInfo(clickedNode);
+                var clickedNodeInfo = graph.NodeInfos[clickedNode];
                 var pen = new Pen(Color.Black);
                 bufferGraphics.DrawLine(pen, clickedNodeInfo.X, clickedNodeInfo.Y, x, y);
             }
