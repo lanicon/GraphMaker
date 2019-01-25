@@ -1,13 +1,21 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace GraphMaker.Model
 {
     public class Edge : IEdge
     {
-        public INode First { get; }
+        [JsonConstructor]
+        private Edge() { }
 
-        public INode Second { get; }
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
+        public INode First { get; private set; }
 
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
+        public INode Second { get; private set; }
+
+        [JsonProperty]
         public int Length { get; set; }
 
         public Edge(INode first, INode second, int length) : this(first, second)

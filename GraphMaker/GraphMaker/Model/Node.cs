@@ -1,19 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace GraphMaker.Model
 {
     public class Node : INode
     { 
+        [JsonConstructor]
+        private Node() { }
+
         public Node(int number)
         {
             Number = number;
         }
 
-        public int Number { get; }
+        [JsonProperty]
+        public int Number { get; private set; }
 
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
         public List<IEdge> IncidentEdges { get; } = new List<IEdge>();
 
+        [JsonIgnore]
         public List<INode> IncidentNodes
         {
             get

@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Runtime.Serialization.Formatters;
+using System.Text.RegularExpressions;
 using FluentAssertions;
 using GraphMaker.Model;
 using GraphMaker.UI;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 
 namespace GraphMaker.Tests
@@ -145,6 +151,19 @@ namespace GraphMaker.Tests
             graph.NodeInfos[node]
                 .Should()
                 .Be(new NodeInfo(42, 43, Color.Blue));
+        }
+
+        [Test]
+        public void ShouldBeSerializable()
+        {
+            var node1 = graph.AddNode(0, 0, Color.Red);
+            var node2 = graph.AddNode(1, 1, Color.Green);
+            graph.AddEdge(node1, node2, 42, Color.Blue);
+
+            var json1 = UiGraph.Serialize(graph);
+            var deserializedGraph = UiGraph.Deserialize(json1);
+            var json2 = UiGraph.Serialize(deserializedGraph);
+            json1.Should().Be(json2);
         }
     }
 }
