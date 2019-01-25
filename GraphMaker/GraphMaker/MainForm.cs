@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using GraphMaker.Model;
 using GraphMaker.Extensions;
+using GraphMaker.Model;
 using GraphMaker.UI;
 
 namespace GraphMaker
@@ -53,8 +52,7 @@ namespace GraphMaker
         private void imDrawSpace_MouseDown(object sender, MouseEventArgs e)
         {
             if (nodesEdgesState == NodesEdges.Nodes)
-            {
-                switch(mouseOn)
+                switch (mouseOn)
                 {
                     case NodesEdges.None:
                         if (e.Button == MouseButtons.Left)
@@ -72,12 +70,11 @@ namespace GraphMaker
                             clickedNode = selectedNode;
                             clickState = ClickStates.Delete;
                         }
+
                         break;
                 }
-            }
             else
-            {
-                switch(mouseOn)
+                switch (mouseOn)
                 {
                     case NodesEdges.Edges:
                         if (e.Button == MouseButtons.Right)
@@ -85,6 +82,7 @@ namespace GraphMaker
                             clickedEdge = selectedEdge;
                             clickState = ClickStates.Delete;
                         }
+
                         break;
                     case NodesEdges.Nodes:
                         if (e.Button == MouseButtons.Left)
@@ -92,9 +90,9 @@ namespace GraphMaker
                             clickedNode = selectedNode;
                             clickState = ClickStates.Add;
                         }
+
                         break;
                 }
-            }
         }
 
         private void imDrawSpace_MouseUp(object sender, MouseEventArgs e)
@@ -116,11 +114,11 @@ namespace GraphMaker
                 {
                     case ClickStates.Add:
                         if (selectedNode != null && selectedNode != clickedNode)
-                            graph.AddEdge(clickedNode, selectedNode, DefaultLength, Color.Black);
+                            graph.AddEdge(clickedNode, selectedNode, DefaultLength);
                         break;
 
                     case ClickStates.Delete:
-                            graph.DeleteEdge(clickedEdge);
+                        graph.DeleteEdge(clickedEdge);
                         break;
                 }
             clickedNode = null;
@@ -191,26 +189,27 @@ namespace GraphMaker
             var onLine = false;
             var onSementX = false;
             var onSementY = false;
-            if (edge.To.X == edge.From.X)
+            if (edge.Second.X == edge.First.X)
             {
-                onLine = Math.Abs(x - edge.From.X) <= 1;
-                onSementX = x - edge.From.X <= 5;
-                onSementY = y <= edge.From.Y && y >= edge.To.Y || y <= edge.To.Y && y >= edge.From.Y;
+                onLine = Math.Abs(x - edge.First.X) <= 1;
+                onSementX = x - edge.First.X <= 5;
+                onSementY = y <= edge.First.Y && y >= edge.Second.Y || y <= edge.Second.Y && y >= edge.First.Y;
             }
-            else if (edge.To.Y == edge.From.Y)
+            else if (edge.Second.Y == edge.First.Y)
             {
-                onLine = Math.Abs(y - edge.From.Y) <= 10;
-                onSementX = x <= edge.From.X && x >= edge.To.X || x <= edge.To.X && x >= edge.From.X;
-                onSementY = y - edge.From.Y <= 5;
+                onLine = Math.Abs(y - edge.First.Y) <= 10;
+                onSementX = x <= edge.First.X && x >= edge.Second.X || x <= edge.Second.X && x >= edge.First.X;
+                onSementY = y - edge.First.Y <= 5;
             }
             else
             {
-                onLine = Math.Abs((x - edge.From.X) / (float)(edge.To.X - edge.From.X) -
-                                    (y - edge.From.Y) / (float)(edge.To.Y - edge.From.Y)) <= e;
+                onLine = Math.Abs((x - edge.First.X) / (float) (edge.Second.X - edge.First.X) -
+                                  (y - edge.First.Y) / (float) (edge.Second.Y - edge.First.Y)) <= e;
 
-                onSementX = x <= edge.From.X && x >= edge.To.X || x <= edge.To.X && x >= edge.From.X;
-                onSementY = y <= edge.From.Y && y >= edge.To.Y || y <= edge.To.Y && y >= edge.From.Y;
+                onSementX = x <= edge.First.X && x >= edge.Second.X || x <= edge.Second.X && x >= edge.First.X;
+                onSementY = y <= edge.First.Y && y >= edge.Second.Y || y <= edge.Second.Y && y >= edge.First.Y;
             }
+
             return onLine && onSementX && onSementY;
         }
 
@@ -227,26 +226,26 @@ namespace GraphMaker
         private void cbEdgeSizeChange_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbEdgeSizeChange.SelectedItem != null)
-                nudEdgeSizeChange.Value = ((IEdge)cbEdgeSizeChange.SelectedItem).Length;
+                nudEdgeSizeChange.Value = ((IEdge) cbEdgeSizeChange.SelectedItem).Length;
         }
 
         private void nudEdgeSizeChange_ValueChanged(object sender, EventArgs e)
         {
             if (cbEdgeSizeChange.SelectedItem != null)
             {
-                var changeEdge = (IEdge)cbEdgeSizeChange.SelectedItem;
-                changeEdge.Length = (int)nudEdgeSizeChange.Value;
+                var changeEdge = (IEdge) cbEdgeSizeChange.SelectedItem;
+                changeEdge.Length = (int) nudEdgeSizeChange.Value;
             }
         }
 
         private void RecursiveAlg_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(graph.CCcountRecursiveDFS().ToString() + " компонент(ы) связности");
+            MessageBox.Show(graph.CCcountRecursiveDFS() + " компонент(ы) связности");
         }
 
         private void StackAlg_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(graph.CCcountStackDFS().ToString() + " компонент(ы) связности");
+            MessageBox.Show(graph.CCcountStackDFS() + " компонент(ы) связности");
         }
 
         private void rbNodes_CheckedChanged(object sender, EventArgs e)
@@ -270,7 +269,7 @@ namespace GraphMaker
             {
                 var edgeInfo = graph.GetEdgeInfo(edge);
                 var pen = new Pen(edgeInfo.Color);
-                bufferGraphics.DrawLine(pen, edgeInfo.From.X, edgeInfo.From.Y, edgeInfo.To.X, edgeInfo.To.Y);
+                bufferGraphics.DrawLine(pen, edgeInfo.First.X, edgeInfo.First.Y, edgeInfo.Second.X, edgeInfo.Second.Y);
             }
 
             //в процессе добавления ребра
