@@ -79,7 +79,7 @@ namespace GraphMaker.Tests
             var edge12 = Node.Connect(node1, node2);
 
             Node.Disconnect(edge12);
-            Node.Disconnect(edge12);
+            Assert.DoesNotThrow(() => Node.Disconnect(edge12));
 
             node1.IncidentNodes.Should().BeEmpty();
             node2.IncidentNodes.Should().BeEmpty();

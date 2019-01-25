@@ -56,28 +56,14 @@ namespace GraphMaker.UI
         public INode AddNode(int x, int y, Color color)
         {
             var node = this.graph.AddNode();
-
-            nodeInfos[node] = new NodeInfo
-            {
-                Color = color,
-                X = x,
-                Y = y
-            };
-
+            nodeInfos[node] = new NodeInfo(x, y, color);
             return node;
         }
 
         public IEdge AddEdge(INode first, INode second, int length, Color color)
         {
             var edge = this.graph.AddEdge(first, second, length);
-
-            edgeInfos[edge] = new EdgeInfo
-            {
-                First = nodeInfos[first],
-                Second = nodeInfos[second],
-                Color = color
-            };
-
+            edgeInfos[edge] = new EdgeInfo(nodeInfos[first], NodeInfos[second], color);
             return edge;
         }
 
@@ -93,11 +79,13 @@ namespace GraphMaker.UI
 
         public void DeleteNode(INode node)
         {
+            nodeInfos.Remove(node);
             this.graph.DeleteNode(node);
         }
 
         public void DeleteEdge(IEdge edge)
         {
+            edgeInfos.Remove(edge);
             this.graph.DeleteEdge(edge);
         }
     }
