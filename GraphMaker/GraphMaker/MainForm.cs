@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
+using System.Reflection;
+using System.Resources;
 using System.Windows.Forms;
 using GraphMaker.Extensions;
 using GraphMaker.Model;
@@ -26,7 +29,7 @@ namespace GraphMaker
 
         private const int DefaultLength = 1;
 
-        private readonly UiGraph graph = new UiGraph(typeof(Graph));
+        private UiGraph graph;
 
         private ClickStates clickState = ClickStates.NoClick;
 
@@ -48,7 +51,7 @@ namespace GraphMaker
         {
             InitializeComponent();
         }
-
+        
         private void imDrawSpace_MouseDown(object sender, MouseEventArgs e)
         {
             if (nodesEdgesState == NodesEdges.Nodes)
@@ -251,6 +254,49 @@ namespace GraphMaker
         private void rbNodes_CheckedChanged(object sender, EventArgs e)
         {
             nodesEdgesState = NodesEdges.Nodes;
+        }
+
+        private void SaveFile_Click(object sender, EventArgs e)
+        {
+            using (var saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
+                saveFileDialog.FilterIndex = 1;
+                saveFileDialog.RestoreDirectory = true;
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var fileName = saveFileDialog.FileName;
+                    var json = UiGraph.Serialize(graph);
+                    File.WriteAllText(fileName, json);
+                    draw();
+                }
+            }
+        }
+
+        private void OpenFile_Click(object sender, EventArgs e)
+        {
+            using (var openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var fileName = openFileDialog.FileName;
+                    var json = File.ReadAllText(fileName);
+                    graph = UiGraph.Deserialize(json);
+                    draw();
+                }
+            }
+        }
+
+        private void CreateNewFile_Click(object sender, EventArgs e)
+        {
+            imDrawSpace.Enabled = true;
+            graph = new UiGraph(typeof(Graph));
+            draw();
         }
 
         private void draw()
