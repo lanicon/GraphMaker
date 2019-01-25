@@ -6,14 +6,6 @@ namespace GraphMaker.Model
 {
     public class Node : INode
     { 
-        [JsonConstructor]
-        private Node() { }
-
-        public Node(int number)
-        {
-            Number = number;
-        }
-
         [JsonProperty]
         public int Number { get; private set; }
 
@@ -30,7 +22,15 @@ namespace GraphMaker.Model
                     .ToList();
             }
         }
-        
+
+        [JsonConstructor]
+        private Node() { }
+
+        public Node(int number)
+        {
+            Number = number;
+        }
+
         public static IEdge Connect(INode node1, INode node2, int length = 1)
         {
             // Если вершины уже соединены, то просто вернём нужное ребро

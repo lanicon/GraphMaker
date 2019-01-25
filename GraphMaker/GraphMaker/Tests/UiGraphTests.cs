@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.Serialization.Formatters;
-using System.Text.RegularExpressions;
 using FluentAssertions;
 using GraphMaker.Model;
 using GraphMaker.UI;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 
 namespace GraphMaker.Tests
