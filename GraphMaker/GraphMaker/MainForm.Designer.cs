@@ -74,7 +74,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.imDrawSpace.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.imDrawSpace.Enabled = false;
             this.imDrawSpace.Location = new System.Drawing.Point(16, 137);
             this.imDrawSpace.Margin = new System.Windows.Forms.Padding(4);
             this.imDrawSpace.Name = "imDrawSpace";

@@ -29,7 +29,7 @@ namespace GraphMaker
 
         private const int DefaultLength = 1;
 
-        private UiGraph graph;
+        private UiGraph graph = UiGraph.New();
 
         private ClickStates clickState = ClickStates.NoClick;
 
@@ -258,6 +258,11 @@ namespace GraphMaker
 
         private void SaveFile_Click(object sender, EventArgs e)
         {
+            SaveGraphToFile();
+        }
+
+        private void SaveGraphToFile()
+        {
             using (var saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
@@ -294,8 +299,16 @@ namespace GraphMaker
 
         private void CreateNewFile_Click(object sender, EventArgs e)
         {
-            imDrawSpace.Enabled = true;
-            graph = new UiGraph(typeof(Graph));
+            var dialogResult = MessageBox.Show("Сохранить файл? Все несохраненные изменения будут потеряны.", "", MessageBoxButtons.YesNoCancel);
+            switch (dialogResult)
+            {
+                case DialogResult.Cancel:
+                    return;
+                case DialogResult.Yes:
+                    SaveGraphToFile();
+                    break;
+            }
+            graph = UiGraph.New();
             draw();
         }
 

@@ -117,5 +117,10 @@ namespace GraphMaker.UI
         {
             return JsonConvert.DeserializeObject<UiGraph>(json, jsonSettings);
         }
+
+        public static UiGraph New()
+        {
+            return new UiGraph();
+        }
     }
 }
