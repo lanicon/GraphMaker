@@ -85,6 +85,7 @@
     <Compile Include="Tests\GraphTests.cs" />
     <Compile Include="Tests\NodeTests.cs" />
     <Compile Include="Tests\NodeTraversalTests.cs" />
+    <Compile Include="Tests\ShortestPathTest.cs" />
     <Compile Include="Tests\UiGraphTests.cs" />
     <Compile Include="UI\EdgeInfo.cs" />
     <Compile Include="UI\NodeInfo.cs" />
