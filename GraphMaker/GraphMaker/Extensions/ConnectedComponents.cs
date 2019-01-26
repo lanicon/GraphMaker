@@ -85,7 +85,11 @@ namespace GraphMaker.Extensions
         public static List<List<INode>> GetListOfComponents(this IGraph graph)
         {
             var listOfNodes = graph.Nodes;
-            bool[] used = new bool[listOfNodes.Count];
+            Dictionary<int, bool> used = new Dictionary<int, bool>();
+            for (int i = 0; i < listOfNodes.Count; i++)
+            {
+                used.Add(listOfNodes[i].Number, false);
+            }
             var listOfComponents = new List<List<INode>>();
 
             foreach (var node in listOfNodes)
