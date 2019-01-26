@@ -141,18 +141,21 @@
             this.CreateNewFile.Name = "CreateNewFile";
             this.CreateNewFile.Size = new System.Drawing.Size(289, 26);
             this.CreateNewFile.Text = "Создать новый файл";
+            this.CreateNewFile.Click += new System.EventHandler(this.CreateNewFile_Click);
             // 
             // OpenFile
             // 
             this.OpenFile.Name = "OpenFile";
             this.OpenFile.Size = new System.Drawing.Size(289, 26);
             this.OpenFile.Text = "Открыть существующий файл";
+            this.OpenFile.Click += new System.EventHandler(this.OpenFile_Click);
             // 
             // SaveFile
             // 
             this.SaveFile.Name = "SaveFile";
             this.SaveFile.Size = new System.Drawing.Size(289, 26);
             this.SaveFile.Text = "Сохранить файл";
+            this.SaveFile.Click += new System.EventHandler(this.SaveFile_Click);
             // 
             // нахождениеМинимальногоToolStripMenuItem
             // 
