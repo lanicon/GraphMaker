@@ -253,6 +253,21 @@ namespace GraphMaker
             nodesEdgesState = NodesEdges.Nodes;
         }
 
+        private void showComponentsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var listOfComponents = graph.GetListOfComponents();
+            string answer = string.Empty;
+            foreach (var component in listOfComponents)
+            {
+                answer += "компонента: ";
+                foreach (var node in component)
+                    answer += node.Number + " ";
+                answer += "\n";
+            }
+            MessageBox.Show(listOfComponents.Count + " компонент(ы) связности\n" + answer);
+            // Тут сделает Ярик, как ему удобнее использовать этот метод, чтобы отобразить компоненты
+        }
+
         private void draw()
         {
             var buffer = new Bitmap(imDrawSpace.Width, imDrawSpace.Height);

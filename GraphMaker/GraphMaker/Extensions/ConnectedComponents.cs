@@ -71,5 +71,25 @@ namespace GraphMaker.Extensions
             }
             return ConnectedComponentCount;
         }
+
+        public static List<List<INode>> GetListOfComponents(this IGraph graph)
+        {
+            var listOfNodes = graph.Nodes;
+            bool[] used = new bool[listOfNodes.Count];
+            var listOfComponents = new List<List<INode>>();
+
+            foreach (var node in listOfNodes)
+            {
+                if (!used[node.Number])
+                {
+                    var component = NodeExtensions.DepthSearch(node);
+                    listOfComponents.Add(component);
+                    foreach (var usedNode in component)
+                        used[usedNode.Number] = true;
+                }
+            }
+
+            return listOfComponents;
+        }
     }
 }
