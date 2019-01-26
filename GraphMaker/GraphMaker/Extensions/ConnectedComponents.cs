@@ -5,7 +5,7 @@ namespace GraphMaker.Extensions
 {
     public static partial class GraphExtensions
     {
-        private static void StackDFS(Node node, bool[] used)
+        private static void StackDFS(Node node, Dictionary<int, bool> used)
         {
             Stack<Node> nodes = new Stack<Node>();
             nodes.Push(node);
@@ -28,7 +28,12 @@ namespace GraphMaker.Extensions
         public static int CCcountStackDFS(this IGraph graph)
         {
             var listOfNodes = graph.Nodes;
-            bool[] used = new bool[listOfNodes.Count];
+            Dictionary<int, bool> used = new Dictionary<int, bool>();
+            for(int i =0; i<listOfNodes.Count;i++)
+            {
+                used.Add(listOfNodes[i].Number, false);
+            }
+            //bool[] used = new bool[listOfNodes[listOfNodes.Count - 1].Number + 1];
             int ConnectedComponentCount = 0;
 
             foreach (var node in listOfNodes)
@@ -42,7 +47,7 @@ namespace GraphMaker.Extensions
             return ConnectedComponentCount;
         }
 
-        private static void RecursiveDFS(Node node, bool[] used)
+        private static void RecursiveDFS(Node node, Dictionary<int, bool> used)
         {
             foreach (var incNode in node.IncidentNodes)
             {
@@ -57,7 +62,12 @@ namespace GraphMaker.Extensions
         public static int CCcountRecursiveDFS(this IGraph graph)
         {
             var listOfNodes = graph.Nodes;
-            bool[] used = new bool[listOfNodes.Count];
+            //bool[] used = new bool[listOfNodes.Count];
+            Dictionary<int, bool> used = new Dictionary<int, bool>();
+            for (int i = 0; i < listOfNodes.Count; i++)
+            {
+                used.Add(listOfNodes[i].Number, false);
+            }
             int ConnectedComponentCount = 0;
 
             foreach (var node in listOfNodes)
