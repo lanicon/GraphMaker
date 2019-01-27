@@ -73,7 +73,13 @@ namespace GraphMaker
                             clickedNode = selectedNode;
                             clickState = ClickStates.Delete;
                         }
-
+                        break;
+                    case NodesEdges.Edges:
+                        if (e.Button == MouseButtons.Left)
+                        {
+                            clickedEdge = selectedEdge;
+                            cbEdgeSizeChange.SelectedItem = selectedEdge;
+                        }
                         break;
                 }
             else
@@ -84,6 +90,11 @@ namespace GraphMaker
                         {
                             clickedEdge = selectedEdge;
                             clickState = ClickStates.Delete;
+                        }
+                        if(e.Button == MouseButtons.Left)
+                        {
+                            clickedEdge = selectedEdge;
+                            cbEdgeSizeChange.SelectedItem = selectedEdge;
                         }
 
                         break;
@@ -117,21 +128,20 @@ namespace GraphMaker
                 {
                     case ClickStates.Add:
                         if (selectedNode != null && selectedNode != clickedNode)
-                            graph.AddEdge(clickedNode, selectedNode, DefaultLength);
+                        {
+                            IEdge edge = graph.AddEdge(clickedNode, selectedNode, DefaultLength);
+                            cbEdgeSizeChange.Items.Add(edge);
+                        }
                         break;
 
                     case ClickStates.Delete:
+                        cbEdgeSizeChange.Items.Remove(clickedEdge);
                         graph.DeleteEdge(clickedEdge);
                         break;
                 }
             clickedNode = null;
             clickedEdge = null;
             clickState = ClickStates.NoClick;
-            cbEdgeSizeChange.Items.Clear();
-            foreach (var edge in graph.Edges)
-                cbEdgeSizeChange.Items.Add(edge);
-            if (cbEdgeSizeChange.SelectedIndex == -1)
-                nudEdgeSizeChange.Value = 1;
             draw();
         }
 
@@ -159,12 +169,7 @@ namespace GraphMaker
                 if (Math.Abs(nodeInfo.X - x) < size / 2 && Math.Abs(nodeInfo.Y - y) < size / 2 && selectedNode == null)
                 {
                     mouseOn = NodesEdges.Nodes;
-                    nodeInfo.Color = Color.Red;
                     selectedNode = node;
-                }
-                else
-                {
-                    nodeInfo.Color = Color.Black;
                 }
             }
 
@@ -173,13 +178,8 @@ namespace GraphMaker
                 var edgeInfo = graph.EdgeInfos[edge];
                 if (pointOnEdge(x, y, edgeInfo) && mouseOn != NodesEdges.Nodes && selectedEdge == null)
                 {
-                    edgeInfo.Color = Color.Red;
                     mouseOn = NodesEdges.Edges;
                     selectedEdge = edge;
-                }
-                else
-                {
-                    edgeInfo.Color = Color.Black;
                 }
             }
 
@@ -188,10 +188,6 @@ namespace GraphMaker
 
         private bool pointOnEdge(int x, int y, EdgeInfo edge)
         {
-
-
-
-            const float e = 0.2f;
             const int d = 5;
             var onLine = false;
             var onSementX = false;
@@ -248,6 +244,7 @@ namespace GraphMaker
         {
             if (cbEdgeSizeChange.SelectedItem != null)
                 nudEdgeSizeChange.Value = ((IEdge) cbEdgeSizeChange.SelectedItem).Length;
+            draw();
         }
 
         private void nudEdgeSizeChange_ValueChanged(object sender, EventArgs e)
@@ -276,15 +273,27 @@ namespace GraphMaker
 
         private void showComponentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+            Color[] colors = { Color.Blue, Color.Green, Color.Yellow, Color.Purple };
             var listOfComponents = graph.GetListOfComponents();
             string answer = string.Empty;
+            int i=0;
             foreach (var component in listOfComponents)
             {
                 answer += "компонента: ";
                 foreach (var node in component)
+                {
                     answer += node.Number + " ";
+                    graph.NodeInfos[node].Color = colors[i];
+                }
                 answer += "\n";
+
+                if (i == (colors.Length - 1))
+                    i = 0;
+                else
+                    i++;
             }
+            draw();
             MessageBox.Show(listOfComponents.Count + " компонент(ы) связности\n" + answer);
             // Тут сделает Ярик, как ему удобнее использовать этот метод, чтобы отобразить компоненты
         }
@@ -324,6 +333,13 @@ namespace GraphMaker
                     var fileName = openFileDialog.FileName;
                     var json = File.ReadAllText(fileName);
                     graph = UiGraph.Deserialize(json);
+                    selectedEdge = null;
+                    clickedEdge = null;
+                    cbEdgeSizeChange.Items.Clear();
+                    foreach (var edge in graph.Edges)
+                        cbEdgeSizeChange.Items.Add(edge);
+                    if (cbEdgeSizeChange.SelectedIndex == -1)
+                        nudEdgeSizeChange.Value = 1;
                     draw();
                 }
             }
@@ -349,18 +365,36 @@ namespace GraphMaker
             var buffer = new Bitmap(imDrawSpace.Width, imDrawSpace.Height);
             var bufferGraphics = Graphics.FromImage(buffer);
             var size = trackBarNodeSize.Value;
+
+            //отрисовка вершинд
             foreach (var node in graph.Nodes)
             {
                 var nodeInfo = graph.NodeInfos[node];
-                var pen = new Pen(nodeInfo.Color);
+                var pen = (node == selectedNode)? new Pen(Color.Red): new Pen(nodeInfo.Color);
                 bufferGraphics.DrawEllipse(pen, nodeInfo.X - size / 2, nodeInfo.Y - size / 2, size, size);
             }
 
+            //отрисовка ребер
             foreach (var edge in graph.Edges)
             {
                 var edgeInfo = graph.EdgeInfos[edge];
-                var pen = new Pen(edgeInfo.Color);
+                var pen = (edge == selectedEdge) ? new Pen(Color.Red) : new Pen(edgeInfo.Color);
                 bufferGraphics.DrawLine(pen, edgeInfo.First.X, edgeInfo.First.Y, edgeInfo.Second.X, edgeInfo.Second.Y);
+            }
+
+            //отрисовка квадрата вокруг выбранного ребра
+            if(cbEdgeSizeChange.SelectedItem as IEdge != null)
+            {
+                EdgeInfo edgeInfo = graph.EdgeInfos[cbEdgeSizeChange.SelectedItem as IEdge];
+                int x = edgeInfo.First.X < edgeInfo.Second.X ? edgeInfo.First.X : edgeInfo.Second.X;
+                int y = edgeInfo.First.Y < edgeInfo.Second.Y ? edgeInfo.First.Y : edgeInfo.Second.Y;
+                int width = Math.Abs(edgeInfo.First.X - edgeInfo.Second.X);
+                width = width == 0 ? 2 : width;
+                int height = Math.Abs(edgeInfo.First.Y - edgeInfo.Second.Y);
+                height = height == 0 ? 2 : height;
+                Pen pen = new Pen(Color.Blue);
+                Rectangle rect = new Rectangle(x, y, width, height);
+                bufferGraphics.DrawRectangle(pen, rect);
             }
 
             //в процессе добавления ребра
