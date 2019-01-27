@@ -115,7 +115,7 @@ namespace GraphMaker
                 switch (clickState)
                 {
                     case ClickStates.Add:
-                        clickedNode = graph.AddNode(x, y, Color.Black);
+                        clickedNode = graph.AddNode(x, y, Color.White);
                         break;
                     case ClickStates.Delete:
                         if (clickedNode != null) graph.DeleteNode(clickedNode);
@@ -188,7 +188,7 @@ namespace GraphMaker
 
         private bool pointOnEdge(int x, int y, EdgeInfo edge)
         {
-            const int d = 5;
+            const int d = 10;
             var onLine = false;
             var onSementX = false;
             var onSementY = false;
@@ -274,7 +274,7 @@ namespace GraphMaker
         private void showComponentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            Color[] colors = { Color.Blue, Color.Green, Color.Yellow, Color.Purple };
+            Color[] colors = { Color.Blue, Color.Green, Color.Yellow, Color.Purple, Color.Brown, Color.Pink, Color.RoyalBlue };
             var listOfComponents = graph.GetListOfComponents();
             string answer = string.Empty;
             int i=0;
@@ -366,13 +366,6 @@ namespace GraphMaker
             var bufferGraphics = Graphics.FromImage(buffer);
             var size = trackBarNodeSize.Value;
 
-            //отрисовка вершинд
-            foreach (var node in graph.Nodes)
-            {
-                var nodeInfo = graph.NodeInfos[node];
-                var pen = (node == selectedNode)? new Pen(Color.Red): new Pen(nodeInfo.Color);
-                bufferGraphics.DrawEllipse(pen, nodeInfo.X - size / 2, nodeInfo.Y - size / 2, size, size);
-            }
 
             //отрисовка ребер
             foreach (var edge in graph.Edges)
@@ -382,8 +375,25 @@ namespace GraphMaker
                 bufferGraphics.DrawLine(pen, edgeInfo.First.X, edgeInfo.First.Y, edgeInfo.Second.X, edgeInfo.Second.Y);
             }
 
+
+            //отрисовка вершинд
+            foreach (var node in graph.Nodes)
+            {
+                var nodeInfo = graph.NodeInfos[node];
+                var pen = (node == selectedNode) ? new Pen(Color.Red) : new Pen(nodeInfo.Color);
+                int x = nodeInfo.X - size / 2;
+                int y = nodeInfo.Y - size / 2;
+                bufferGraphics.FillEllipse(pen.Brush, x, y, size, size);
+                Pen basicPen = new Pen(Color.Black);
+                bufferGraphics.DrawEllipse(basicPen, x, y, size, size);
+                int fontSize = 10;
+                Font font = new Font(FontFamily.GenericSerif, fontSize);
+                string text = node.Number.ToString();
+                bufferGraphics.DrawString(text, font, basicPen.Brush, nodeInfo.X - text.Length*fontSize / 2, nodeInfo.Y - fontSize/3);
+            }
+
             //отрисовка квадрата вокруг выбранного ребра
-            if(cbEdgeSizeChange.SelectedItem as IEdge != null)
+            if (cbEdgeSizeChange.SelectedItem as IEdge != null)
             {
                 EdgeInfo edgeInfo = graph.EdgeInfos[cbEdgeSizeChange.SelectedItem as IEdge];
                 int x = edgeInfo.First.X < edgeInfo.Second.X ? edgeInfo.First.X : edgeInfo.Second.X;
