@@ -324,6 +324,10 @@ namespace GraphMaker
             }
             graph = UiGraph.New();
             draw();
+
+        private void нахождениеМинимальногоОстовногоДереваToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            graph.MinTreePrim();
         }
 
         private void draw()
