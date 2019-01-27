@@ -168,6 +168,7 @@
             this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Name = "нахождениеМинимальногоОстовногоДереваToolStripMenuItem";
             this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Size = new System.Drawing.Size(348, 24);
             this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Text = "Нахождение минимального остовного дерева";
+            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Click += new System.EventHandler(this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem_Click);
             // 
             // нахождениеКоличестваКомпонентСвязностиToolStripMenuItem
             // 
