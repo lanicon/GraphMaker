@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using GraphMaker.Infrastructure;
 using GraphMaker.Model;
+using Newtonsoft.Json;
 
 namespace GraphMaker.UI
 { 
@@ -16,6 +18,7 @@ namespace GraphMaker.UI
 
         private readonly Color DefaultEdgeColor = Color.Black;
 
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
         private readonly IGraph graph;
 
         private readonly Dictionary<IEdge, EdgeInfo> edgeInfos = new Dictionary<IEdge, EdgeInfo>();
@@ -24,13 +27,20 @@ namespace GraphMaker.UI
 
         public event GraphChangeEvent Changed;
 
+        [JsonIgnore]
         public IReadOnlyList<INode> Nodes => this.graph.Nodes;
 
+        [JsonIgnore]
         public IReadOnlyList<IEdge> Edges => this.graph.Edges;
 
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
         public IReadOnlyDictionary<IEdge, EdgeInfo> EdgeInfos => edgeInfos;
 
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
         public IReadOnlyDictionary<INode, NodeInfo> NodeInfos => nodeInfos;
+
+        [JsonConstructor]
+        private UiGraph() : this(typeof(Graph)) { }
 
         public UiGraph(Type graphType)
         {
@@ -87,6 +97,30 @@ namespace GraphMaker.UI
         {
             edgeInfos.Remove(edge);
             this.graph.DeleteEdge(edge);
+        }
+
+        private static readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
+        {
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+            TypeNameHandling = TypeNameHandling.All,
+            Formatting = Formatting.Indented,
+            ContractResolver = new DictionaryAsArrayResolver()
+        };
+
+        public static string Serialize(UiGraph graph)
+        {
+            return JsonConvert.SerializeObject(graph, jsonSettings);
+        }
+
+        public static UiGraph Deserialize(string json)
+        {
+            return JsonConvert.DeserializeObject<UiGraph>(json, jsonSettings);
+        }
+
+        public static UiGraph New()
+        {
+            return new UiGraph();
         }
     }
 }

@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace GraphMaker.Model
 {
     public class Node : INode
     { 
-        public Node(int number)
-        {
-            Number = number;
-        }
+        [JsonProperty]
+        public int Number { get; private set; }
 
-        public int Number { get; }
-
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
         public List<IEdge> IncidentEdges { get; } = new List<IEdge>();
 
+        [JsonIgnore]
         public List<INode> IncidentNodes
         {
             get
@@ -23,7 +22,15 @@ namespace GraphMaker.Model
                     .ToList();
             }
         }
-        
+
+        [JsonConstructor]
+        private Node() { }
+
+        public Node(int number)
+        {
+            Number = number;
+        }
+
         public static IEdge Connect(INode node1, INode node2, int length = 1)
         {
             // Если вершины уже соединены, то просто вернём нужное ребро

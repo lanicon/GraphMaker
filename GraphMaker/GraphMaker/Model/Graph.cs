@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace GraphMaker.Model
 {
@@ -7,16 +8,20 @@ namespace GraphMaker.Model
     {
         // Все вершины в графе нумеруются с 0 и никогда не перенумеруются
         // (счётчик всегда увеличивается)
+        [JsonProperty]
         private int numberCounter = 0;
 
+        [JsonIgnore]
         private List<INode> nodes { get; } = new List<INode>();
 
         public event GraphChangeEvent Changed;
 
         public INode this[int index] => nodes[index];
 
+        [JsonProperty]
         public IReadOnlyList<INode> Nodes => nodes;
 
+        [JsonIgnore]
         public IReadOnlyList<IEdge> Edges
         {
             get

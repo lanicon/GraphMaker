@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
+using System.Reflection;
+using System.Resources;
 using System.Windows.Forms;
 using GraphMaker.Extensions;
 using GraphMaker.Model;
@@ -26,7 +29,7 @@ namespace GraphMaker
 
         private const int DefaultLength = 1;
 
-        private readonly UiGraph graph = new UiGraph(typeof(Graph));
+        private UiGraph graph = UiGraph.New();
 
         private ClickStates clickState = ClickStates.NoClick;
 
@@ -48,7 +51,7 @@ namespace GraphMaker
         {
             InitializeComponent();
         }
-
+        
         private void imDrawSpace_MouseDown(object sender, MouseEventArgs e)
         {
             if (nodesEdgesState == NodesEdges.Nodes)
@@ -251,6 +254,76 @@ namespace GraphMaker
         private void rbNodes_CheckedChanged(object sender, EventArgs e)
         {
             nodesEdgesState = NodesEdges.Nodes;
+        }
+
+        private void showComponentsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var listOfComponents = graph.GetListOfComponents();
+            string answer = string.Empty;
+            foreach (var component in listOfComponents)
+            {
+                answer += "компонента: ";
+                foreach (var node in component)
+                    answer += node.Number + " ";
+                answer += "\n";
+            }
+            MessageBox.Show(listOfComponents.Count + " компонент(ы) связности\n" + answer);
+            // Тут сделает Ярик, как ему удобнее использовать этот метод, чтобы отобразить компоненты
+        }
+        private void SaveFile_Click(object sender, EventArgs e)
+        {
+            SaveGraphToFile();
+        }
+
+        private void SaveGraphToFile()
+        {
+            using (var saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
+                saveFileDialog.FilterIndex = 1;
+                saveFileDialog.RestoreDirectory = true;
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var fileName = saveFileDialog.FileName;
+                    var json = UiGraph.Serialize(graph);
+                    File.WriteAllText(fileName, json);
+                    draw();
+                }
+            }
+        }
+
+        private void OpenFile_Click(object sender, EventArgs e)
+        {
+            using (var openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var fileName = openFileDialog.FileName;
+                    var json = File.ReadAllText(fileName);
+                    graph = UiGraph.Deserialize(json);
+                    draw();
+                }
+            }
+        }
+
+        private void CreateNewFile_Click(object sender, EventArgs e)
+        {
+            var dialogResult = MessageBox.Show("Сохранить файл? Все несохраненные изменения будут потеряны.", "", MessageBoxButtons.YesNoCancel);
+            switch (dialogResult)
+            {
+                case DialogResult.Cancel:
+                    return;
+                case DialogResult.Yes:
+                    SaveGraphToFile();
+                    break;
+            }
+            graph = UiGraph.New();
+            draw();
         }
 
         private void draw()

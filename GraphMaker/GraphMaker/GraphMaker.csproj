@@ -66,6 +66,7 @@
     <Compile Include="Extensions\MinimumSpanningTree.cs" />
     <Compile Include="Extensions\NodeExtensions.cs" />
     <Compile Include="Extensions\ShortestPath.cs" />
+    <Compile Include="Infrastructure\DictionaryAsArrayResolver.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
