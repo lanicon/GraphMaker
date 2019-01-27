@@ -31,7 +31,12 @@ namespace GraphMaker.Extensions
             List<IEdge> tempEdge = new List<IEdge>();
             List<INode> primNode = new List<INode>();
             bool[] used = new bool[graph.Nodes.Count];
-            int count = 1;            
+            int count = 1;
+            if (graph.CCcountStackDFS() > 1)
+            {
+                MessageBox.Show("Поиск минимального остовного дерева невозможен, так как граф несвязный");
+                return null;
+            }
             //MessageBox.Show(PrinLength(graph.Nodes[0].IncidentEdges));
             if (graph.Nodes.Count != 0)
             //Добавить проверку на количество компонент связности
