@@ -12,10 +12,12 @@ namespace GraphMaker.Extensions
         {
             throw new NotImplementedException();
         }
+
         public static int CompareByLength(IEdge edge1, IEdge edge2)
         {
             return edge1.Length.CompareTo(edge2.Length);
         }
+
         public static string PrinLength(List<IEdge> edges)
         {
             string temp="";
@@ -25,22 +27,41 @@ namespace GraphMaker.Extensions
             }
             return temp;
         }
+
+        public static void PrintEdges(List<IEdge> edges)
+        {
+            string temp = "";
+            foreach (var edge in edges)
+            {
+                temp += edge.ToString() + " (" + edge.Length + ")\n";
+            }
+            MessageBox.Show(temp);
+        }
+
         public static List<IEdge> MinTreePrim(this IGraph graph)
         {
             List<IEdge> primEdge = new List<IEdge>();
             List<IEdge> tempEdge = new List<IEdge>();
             List<INode> primNode = new List<INode>();
-            bool[] used = new bool[graph.Nodes.Count];
             int count = 1;
             if (graph.CCcountStackDFS() > 1)
             {
                 MessageBox.Show("Поиск минимального остовного дерева невозможен, так как граф несвязный");
                 return null;
             }
-            //MessageBox.Show(PrinLength(graph.Nodes[0].IncidentEdges));
-            if (graph.Nodes.Count != 0)
-            //Добавить проверку на количество компонент связности
+            if (graph.Nodes.Count == 0)
             {
+                MessageBox.Show("Не был найден граф");
+                return null;
+            }
+            if (graph.Edges.Count == 0)
+            {
+                MessageBox.Show("Не найдено ни одного ребра");
+                return null;
+            }
+            //MessageBox.Show(PrinLength(graph.Nodes[0].IncidentEdges));
+            
+            //Добавить проверку на количество компонент связности            
                 primNode.Add((Node)graph.Nodes[0]);
                 tempEdge.AddRange(graph.Nodes[0].IncidentEdges);
                 //graph.Nodes[0].IncidentEdges.Sort(CompareByLength);
@@ -71,7 +92,7 @@ namespace GraphMaker.Extensions
                         .First().IncidentEdges);
                     count++;
                 }
-            }
+            PrintEdges(primEdge);
             return primEdge;
         }
     }
