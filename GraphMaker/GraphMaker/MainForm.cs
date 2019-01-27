@@ -171,7 +171,7 @@ namespace GraphMaker
             foreach (var edge in graph.Edges)
             {
                 var edgeInfo = graph.EdgeInfos[edge];
-                if (pointOnEdge(x, y, edgeInfo) && mouseOn != NodesEdges.Nodes)
+                if (pointOnEdge(x, y, edgeInfo) && mouseOn != NodesEdges.Nodes && selectedEdge == null)
                 {
                     edgeInfo.Color = Color.Red;
                     mouseOn = NodesEdges.Edges;
@@ -188,32 +188,50 @@ namespace GraphMaker
 
         private bool pointOnEdge(int x, int y, EdgeInfo edge)
         {
-            const float e = 0.1f;
+
+
+
+            const float e = 0.2f;
+            const int d = 5;
             var onLine = false;
             var onSementX = false;
             var onSementY = false;
             if (edge.Second.X == edge.First.X)
             {
                 onLine = Math.Abs(x - edge.First.X) <= 1;
-                onSementX = x - edge.First.X <= 5;
+                onSementX = Math.Abs(x - edge.First.X) <= 5;
                 onSementY = y <= edge.First.Y && y >= edge.Second.Y || y <= edge.Second.Y && y >= edge.First.Y;
+                return onLine && onSementX && onSementY;
             }
             else if (edge.Second.Y == edge.First.Y)
             {
-                onLine = Math.Abs(y - edge.First.Y) <= 10;
+                onLine = Math.Abs(y - edge.First.Y) <= 1;
                 onSementX = x <= edge.First.X && x >= edge.Second.X || x <= edge.Second.X && x >= edge.First.X;
-                onSementY = y - edge.First.Y <= 5;
+                onSementY = Math.Abs(y - edge.First.Y) <= 5;
+                return onLine && onSementX && onSementY;
             }
             else
             {
-                onLine = Math.Abs((x - edge.First.X) / (float) (edge.Second.X - edge.First.X) -
-                                  (y - edge.First.Y) / (float) (edge.Second.Y - edge.First.Y)) <= e;
+                float k = (edge.Second.Y - edge.First.Y) / (float)(edge.Second.X - edge.First.X);
+                float b = (-edge.First.X * (edge.Second.Y - edge.First.Y)) / (float)(edge.Second.X - edge.First.X) + edge.First.Y;
 
-                onSementX = x <= edge.First.X && x >= edge.Second.X || x <= edge.Second.X && x >= edge.First.X;
-                onSementY = y <= edge.First.Y && y >= edge.Second.Y || y <= edge.Second.Y && y >= edge.First.Y;
+
+                bool top = y <= (k * x + b + d);
+                bool bottom = y >= (k * x + b - d);
+                bool left, right;
+                if (edge.First.Y < edge.Second.Y)
+                {
+                    left = y >= ((edge.First.X - x) / k + edge.First.Y);
+                    right = y <= ((edge.Second.X - x) / k + edge.Second.Y);
+                }
+                else
+                {
+                    left = y >= ((edge.Second.X - x) / k + edge.Second.Y);
+                    right = y <= ((edge.First.X - x) / k + edge.First.Y);
+                }
+                return top && bottom && left && right;
             }
 
-            return onLine && onSementX && onSementY;
         }
 
         private void trackBarNodeSize_ValueChanged(object sender, EventArgs e)
