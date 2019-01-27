@@ -254,6 +254,7 @@ namespace GraphMaker
                 var changeEdge = (IEdge) cbEdgeSizeChange.SelectedItem;
                 changeEdge.Length = (int) nudEdgeSizeChange.Value;
             }
+            draw();
         }
 
         private void RecursiveAlg_Click(object sender, EventArgs e)
@@ -373,6 +374,15 @@ namespace GraphMaker
                 var edgeInfo = graph.EdgeInfos[edge];
                 var pen = (edge == selectedEdge) ? new Pen(Color.Red) : new Pen(edgeInfo.Color);
                 bufferGraphics.DrawLine(pen, edgeInfo.First.X, edgeInfo.First.Y, edgeInfo.Second.X, edgeInfo.Second.Y);
+                int lowestX = edgeInfo.First.X < edgeInfo.Second.X ? edgeInfo.First.X : edgeInfo.Second.X;
+                int lowestY = edgeInfo.First.Y < edgeInfo.Second.Y ? edgeInfo.First.Y : edgeInfo.Second.Y;
+                Point M = new Point(lowestX + Math.Abs(edgeInfo.First.X - edgeInfo.Second.X) / 2, lowestY + Math.Abs(edgeInfo.First.Y - edgeInfo.Second.Y) / 2);
+                Pen basicPen = new Pen(Color.Black,1);
+                int fontSize = 15;
+                Font font = new Font(FontFamily.GenericSerif, fontSize);
+                string text = edge.Length.ToString();
+                bufferGraphics.DrawString(text, font, basicPen.Brush, M);
+
             }
 
 
@@ -389,7 +399,7 @@ namespace GraphMaker
                 int fontSize = 10;
                 Font font = new Font(FontFamily.GenericSerif, fontSize);
                 string text = node.Number.ToString();
-                bufferGraphics.DrawString(text, font, basicPen.Brush, nodeInfo.X - text.Length*fontSize / 2, nodeInfo.Y - fontSize/3);
+                bufferGraphics.DrawString(text, font, basicPen.Brush, nodeInfo.X - text.Length * fontSize / 2, nodeInfo.Y - fontSize / 2);
             }
 
             //отрисовка квадрата вокруг выбранного ребра
