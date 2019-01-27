@@ -275,7 +275,7 @@ namespace GraphMaker
         private void showComponentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            Color[] colors = { Color.Blue, Color.Green, Color.Yellow, Color.Purple, Color.Brown, Color.Pink, Color.RoyalBlue };
+            Color[] colors = { Color.Green, Color.Yellow, Color.Purple, Color.Brown, Color.Pink, Color.Aqua };
             var listOfComponents = graph.GetListOfComponents();
             string answer = string.Empty;
             int i=0;
@@ -296,7 +296,6 @@ namespace GraphMaker
             }
             draw();
             MessageBox.Show(listOfComponents.Count + " компонент(ы) связности\n" + answer);
-            // Тут сделает Ярик, как ему удобнее использовать этот метод, чтобы отобразить компоненты
         }
         private void SaveFile_Click(object sender, EventArgs e)
         {
@@ -363,7 +362,17 @@ namespace GraphMaker
         }
         private void нахождениеМинимальногоОстовногоДереваToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            graph.MinTreePrim();
+            var minTree = graph.MinTreePrim();
+            foreach(var node in graph.Nodes)
+                graph.NodeInfos[node].Color = Color.White;
+
+            Color color = Color.Blue;
+            if (minTree != null)
+                foreach (var edge in minTree)
+                {
+                    var edgeInfo = graph.EdgeInfos[edge];
+                    edgeInfo.Color = color;
+                }
         }
 
         private void draw()
