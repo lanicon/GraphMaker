@@ -253,6 +253,11 @@ namespace GraphMaker
             nodesEdgesState = NodesEdges.Nodes;
         }
 
+        private void нахождениеМинимальногоОстовногоДереваToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            graph.MinTreePrim();
+        }
+
         private void draw()
         {
             var buffer = new Bitmap(imDrawSpace.Width, imDrawSpace.Height);
