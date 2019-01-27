@@ -51,7 +51,7 @@ namespace GraphMaker
         {
             InitializeComponent();
         }
-        
+
         private void imDrawSpace_MouseDown(object sender, MouseEventArgs e)
         {
             if (nodesEdgesState == NodesEdges.Nodes)
@@ -206,8 +206,8 @@ namespace GraphMaker
             }
             else
             {
-                onLine = Math.Abs((x - edge.First.X) / (float) (edge.Second.X - edge.First.X) -
-                                  (y - edge.First.Y) / (float) (edge.Second.Y - edge.First.Y)) <= e;
+                onLine = Math.Abs((x - edge.First.X) / (float)(edge.Second.X - edge.First.X) -
+                                  (y - edge.First.Y) / (float)(edge.Second.Y - edge.First.Y)) <= e;
 
                 onSementX = x <= edge.First.X && x >= edge.Second.X || x <= edge.Second.X && x >= edge.First.X;
                 onSementY = y <= edge.First.Y && y >= edge.Second.Y || y <= edge.Second.Y && y >= edge.First.Y;
@@ -229,15 +229,15 @@ namespace GraphMaker
         private void cbEdgeSizeChange_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbEdgeSizeChange.SelectedItem != null)
-                nudEdgeSizeChange.Value = ((IEdge) cbEdgeSizeChange.SelectedItem).Length;
+                nudEdgeSizeChange.Value = ((IEdge)cbEdgeSizeChange.SelectedItem).Length;
         }
 
         private void nudEdgeSizeChange_ValueChanged(object sender, EventArgs e)
         {
             if (cbEdgeSizeChange.SelectedItem != null)
             {
-                var changeEdge = (IEdge) cbEdgeSizeChange.SelectedItem;
-                changeEdge.Length = (int) nudEdgeSizeChange.Value;
+                var changeEdge = (IEdge)cbEdgeSizeChange.SelectedItem;
+                changeEdge.Length = (int)nudEdgeSizeChange.Value;
             }
         }
 
@@ -325,6 +325,7 @@ namespace GraphMaker
             graph = UiGraph.New();
             draw();
 
+        }
         private void нахождениеМинимальногоОстовногоДереваToolStripMenuItem_Click(object sender, EventArgs e)
         {
             graph.MinTreePrim();
