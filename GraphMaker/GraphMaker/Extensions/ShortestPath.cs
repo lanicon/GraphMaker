@@ -26,14 +26,17 @@ namespace GraphMaker.Extensions
             List<PathToNode> nodePaths = new List<PathToNode>() { new PathToNode(start, 0, new List<IEdge>()) };
             for(int i = 0; i < nodePaths.Count; i++)
             {
-                nodePaths[i].Node.IncidentEdges.Sort((x, y) => x.Length.CompareTo(y.Length));
-                foreach (var incidentEdge in nodePaths[i].Node.IncidentEdges)
+                var iEdges = new List<IEdge>(nodePaths[i].Node.IncidentEdges);
+                iEdges.Sort((x, y) => x.Length.CompareTo(y.Length));
+                foreach (var incidentEdge in iEdges)
                 {
                     var secondNodePathIndex = nodePaths.FindIndex(x => x.Node == incidentEdge.OtherNode(nodePaths[i].Node));
                     if (secondNodePathIndex < 0)
                     {
-                        var newPath = new List<IEdge>(nodePaths[i].Path);
-                        newPath.Add(incidentEdge);
+                        var newPath = new List<IEdge>(nodePaths[i].Path)
+                        {
+                            incidentEdge
+                        };
                         nodePaths.Add(new PathToNode(incidentEdge.OtherNode(nodePaths[i].Node), 
                             nodePaths[i].MinimalLenght + incidentEdge.Length, newPath));
                     }
@@ -41,10 +44,9 @@ namespace GraphMaker.Extensions
                     {
                         if (nodePaths[i].MinimalLenght + incidentEdge.Length < nodePaths[secondNodePathIndex].MinimalLenght)
                         {
-                            var newPathToNode = nodePaths[i];
-                            newPathToNode.MinimalLenght = nodePaths[i].MinimalLenght + incidentEdge.Length;
+                            var newPathToNode = new PathToNode(nodePaths[secondNodePathIndex].Node, 
+                                nodePaths[i].MinimalLenght + incidentEdge.Length, new List<IEdge>(nodePaths[i].Path));
                             newPathToNode.Path.Add(incidentEdge);
-                            newPathToNode.Node = nodePaths[secondNodePathIndex].Node;
                             nodePaths[secondNodePathIndex] = newPathToNode;
                         }
                     }
