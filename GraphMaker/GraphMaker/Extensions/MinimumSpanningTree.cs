@@ -30,7 +30,12 @@ namespace GraphMaker.Extensions
 
         public static void PrintEdges(List<IEdge> edges)
         {
-            string temp = "";
+            int sum = 0;
+            foreach (var edge in edges)
+            {
+                sum += edge.Length;
+            }
+            string temp = "Минимальная длина остовного дерева = " + sum.ToString()+"\n";
             foreach (var edge in edges)
             {
                 temp += edge.ToString() + " (" + edge.Length + ")\n";
