@@ -80,7 +80,7 @@ namespace GraphMaker
                             clickedEdge = selectedEdge;
                             cbEdgeSizeChange.SelectedItem = selectedEdge;
                         }
-                        break;
+                        break;  
                 }
             else
                 switch (mouseOn)
@@ -373,6 +373,97 @@ namespace GraphMaker
                     var edgeInfo = graph.EdgeInfos[edge];
                     edgeInfo.Color = color;
                 }
+        }
+
+        private INode spSelectedNode1;
+        private INode spSelectedNode2;
+        private bool selectionMode = false;
+
+        private void shortestPath_Click(object sender, EventArgs e)
+        {
+            foreach(var edge in graph.EdgeInfos)
+            {
+                edge.Value.Color = Color.Black;
+            }
+            foreach (var node in graph.NodeInfos)
+            {
+                node.Value.Color = Color.White;
+            }
+            spSelectedNode1 = null;
+            spSelectedNode2 = null;
+            if (selectionMode)
+            {
+                selectionMode = false;
+                this.imDrawSpace.MouseDown += new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseDown);
+                this.imDrawSpace.MouseUp += new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseUp);
+                this.imDrawSpace.MouseClick -= new System.Windows.Forms.MouseEventHandler(this.selectNodes);
+                shortestPath_ToolMenuStrip.BackColor = Color.White;
+                MessageBox.Show("Выбор вершин отменен");
+            }
+            else
+            {
+                selectionMode = true;
+                this.imDrawSpace.MouseDown -= new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseDown);
+                this.imDrawSpace.MouseUp -= new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseUp);
+                this.imDrawSpace.MouseClick += new System.Windows.Forms.MouseEventHandler(this.selectNodes);
+                shortestPath_ToolMenuStrip.BackColor = Color.Red;
+                MessageBox.Show("Выберите первую вершину \nДля отмены нажмите кнопку еще раз");
+            }
+        }
+        
+        private void selectNodes(object sender, MouseEventArgs e)
+        {
+            if (NodesEdges.Nodes == mouseOn)
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    if (spSelectedNode1 == null)
+                    {
+                        spSelectedNode1 = selectedNode;
+                        graph.NodeInfos[spSelectedNode1].Color = Color.Green;
+                        MessageBox.Show("Выберите вторую вершину");
+                    }
+                    else
+                    {
+                        if (selectedNode == spSelectedNode1)
+                        {
+                            MessageBox.Show("Выберите другую вершину");
+                        }
+                        else
+                        {
+                            spSelectedNode2 = selectedNode;
+                            graph.NodeInfos[spSelectedNode2].Color = Color.Red;
+                            findShortestPath();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void findShortestPath()
+        {
+            selectionMode = false;
+            this.imDrawSpace.MouseDown += new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseDown);
+            this.imDrawSpace.MouseUp += new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseUp);
+            this.imDrawSpace.MouseClick -= new System.Windows.Forms.MouseEventHandler(this.selectNodes);
+            var shortestPath = graph.GetShortestPath(spSelectedNode1, spSelectedNode2);
+            shortestPath_ToolMenuStrip.BackColor = Color.White;
+            if (shortestPath == null)
+            {
+                MessageBox.Show("Между данными вершинами нет пути");
+            }
+            else
+            {
+                var outStr = "";
+                var path = 0;
+                foreach (var edge in shortestPath)
+                {
+                    graph.EdgeInfos[edge].Color = Color.Red;
+                    outStr += edge.ToString() + "\n";
+                    path += edge.Length;
+                }
+                MessageBox.Show("Кратчайший путь: " + path + "\n" + outStr);
+            }
         }
 
         private void draw()
