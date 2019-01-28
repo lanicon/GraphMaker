@@ -23,39 +23,49 @@ namespace GraphMaker.Extensions
 
         public static List<IEdge> GetShortestPath(this IGraph graph, INode start, INode end)
         {
-            List<PathToNode> nodePaths = new List<PathToNode>() { new PathToNode(start, 0, new List<IEdge>()) };
-            for(int i = 0; i < nodePaths.Count; i++)
+            List<int> nodes = new List<int>();
+            Dictionary<int, PathToNode> nodePaths = new Dictionary<int, PathToNode>();
+            nodePaths.Add(start.Number, new PathToNode(start, 0, new List<IEdge>()));
+            nodes.Add(start.Number);
+            for(int i = 0; i < nodes.Count; i++)
             {
-                var iEdges = new List<IEdge>(nodePaths[i].Node.IncidentEdges);
+                var currentNode = nodes[i];
+                if(nodePaths[currentNode].Node == end)    
+                {
+                    continue;
+                }
+                var iEdges = new List<IEdge>(nodePaths[currentNode].Node.IncidentEdges);
                 iEdges.Sort((x, y) => x.Length.CompareTo(y.Length));
                 foreach (var incidentEdge in iEdges)
                 {
-                    var secondNodePathIndex = nodePaths.FindIndex(x => x.Node == incidentEdge.OtherNode(nodePaths[i].Node));
-                    if (secondNodePathIndex < 0)
+                    var icidentNode = incidentEdge.OtherNode(nodePaths[currentNode].Node).Number;
+                    if (!nodePaths.ContainsKey(icidentNode))
                     {
-                        var newPath = new List<IEdge>(nodePaths[i].Path)
+                        var newPath = new List<IEdge>(nodePaths[currentNode].Path)
                         {
                             incidentEdge
                         };
-                        nodePaths.Add(new PathToNode(incidentEdge.OtherNode(nodePaths[i].Node), 
-                            nodePaths[i].MinimalLenght + incidentEdge.Length, newPath));
+                        nodes.Add(icidentNode);
+                        nodePaths.Add(icidentNode, 
+                            new PathToNode(incidentEdge.OtherNode(nodePaths[currentNode].Node), 
+                            nodePaths[currentNode].MinimalLenght + incidentEdge.Length, newPath));
                     }
-                    else if(!nodePaths[secondNodePathIndex].Viseted)
+                    else if(!nodePaths[icidentNode].Viseted)
                     {
-                        if (nodePaths[i].MinimalLenght + incidentEdge.Length < nodePaths[secondNodePathIndex].MinimalLenght)
+                        if (incidentEdge.Length + nodePaths[currentNode].MinimalLenght < nodePaths[icidentNode].MinimalLenght)
                         {
-                            var newPathToNode = new PathToNode(nodePaths[secondNodePathIndex].Node, 
-                                nodePaths[i].MinimalLenght + incidentEdge.Length, new List<IEdge>(nodePaths[i].Path));
+                            var newPathToNode = new PathToNode(nodePaths[icidentNode].Node, 
+                                nodePaths[currentNode].MinimalLenght + incidentEdge.Length, new List<IEdge>(nodePaths[currentNode].Path));
                             newPathToNode.Path.Add(incidentEdge);
-                            nodePaths[secondNodePathIndex] = newPathToNode;
+                            nodePaths[icidentNode] = newPathToNode;
                         }
                     }
                 }
-                var t = nodePaths[i];
+                var t = nodePaths[currentNode];
                 t.Viseted = true;
-                nodePaths[nodePaths.FindIndex(x => x.Equals(nodePaths[i]))] = t;
+                nodePaths[currentNode] = t;
             }
-            return nodePaths.Find(x => x.Node == end && x.Viseted == true).Path;
+            return nodePaths[end.Number].Path;
         }
     }
 }
