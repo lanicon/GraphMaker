@@ -118,7 +118,15 @@ namespace GraphMaker
                         clickedNode = graph.AddNode(x, y, Color.White);
                         break;
                     case ClickStates.Delete:
-                        if (clickedNode != null) graph.DeleteNode(clickedNode);
+                        if (clickedNode != null)
+                        {
+                            for (var i = clickedNode.IncidentEdges.Count - 1; i >= 0; i--)
+                            {
+                                var clickedEdge = clickedNode.IncidentEdges[i];
+                                cbEdgeSizeChange.Items.Remove(clickedEdge);
+                            }
+                            graph.DeleteNode(clickedNode);
+                        }
                         break;
                     case ClickStates.Move:
                         break;
