@@ -33,16 +33,16 @@ namespace GraphMaker.Model
             }
         }
 
-        protected virtual void OnChanged()
+        protected virtual void OnChanged(GraphOperation operation)
         {
-            Changed?.Invoke();
+            Changed?.Invoke(operation);
         }
 
         public INode AddNode()
         {
             var node = new Node(numberCounter++);
             nodes.Add(node);
-            OnChanged();
+            OnChanged(GraphOperation.AddNode);
             return node;
         }
 
@@ -56,20 +56,20 @@ namespace GraphMaker.Model
             }
 
             nodes.Remove(node);
-            OnChanged();
+            OnChanged(GraphOperation.DeleteNode);
         }
 
         public IEdge AddEdge(INode first, INode second, int length = 1)
         {
             var edge = Node.Connect(first, second, length);
-            OnChanged();
+            OnChanged(GraphOperation.AddEdge);
             return edge;
         }
 
         public void DeleteEdge(IEdge edge)
         {
             Node.Disconnect(edge);
-            OnChanged();
+            OnChanged(GraphOperation.DeleteEdge);
         }
     }
 }

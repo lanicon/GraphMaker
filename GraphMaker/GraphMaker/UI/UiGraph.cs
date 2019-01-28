@@ -19,19 +19,23 @@ namespace GraphMaker.UI
         private readonly Color DefaultEdgeColor = Color.Black;
 
         [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
-        private readonly IGraph graph;
+        private readonly IGraph instance;
 
         private readonly Dictionary<IEdge, EdgeInfo> edgeInfos = new Dictionary<IEdge, EdgeInfo>();
 
         private readonly Dictionary<INode, NodeInfo> nodeInfos = new Dictionary<INode, NodeInfo>();
 
-        public event GraphChangeEvent Changed;
+        public event GraphChangeEvent Changed
+        {
+            add { this.instance.Changed += value; }
+            remove { this.instance.Changed -= value; }
+        }
 
         [JsonIgnore]
-        public IReadOnlyList<INode> Nodes => this.graph.Nodes;
+        public IReadOnlyList<INode> Nodes => this.instance.Nodes;
 
         [JsonIgnore]
-        public IReadOnlyList<IEdge> Edges => this.graph.Edges;
+        public IReadOnlyList<IEdge> Edges => this.instance.Edges;
 
         [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
         public IReadOnlyDictionary<IEdge, EdgeInfo> EdgeInfos => edgeInfos;
@@ -59,20 +63,19 @@ namespace GraphMaker.UI
                 throw new ArgumentException("type must have a default constructor");
             }
 
-            this.graph = (IGraph)Activator.CreateInstance(graphType);
-            this.graph.Changed += Changed;
+            this.instance = (IGraph)Activator.CreateInstance(graphType);
         }
 
         public INode AddNode(int x, int y, Color color)
         {
-            var node = this.graph.AddNode();
+            var node = this.instance.AddNode();
             nodeInfos[node] = new NodeInfo(x, y, color);
             return node;
         }
 
         public IEdge AddEdge(INode first, INode second, int length, Color color)
         {
-            var edge = this.graph.AddEdge(first, second, length);
+            var edge = this.instance.AddEdge(first, second, length);
             edgeInfos[edge] = new EdgeInfo(nodeInfos[first], NodeInfos[second], color);
             return edge;
         }
@@ -90,13 +93,13 @@ namespace GraphMaker.UI
         public void DeleteNode(INode node)
         {
             nodeInfos.Remove(node);
-            this.graph.DeleteNode(node);
+            this.instance.DeleteNode(node);
         }
 
         public void DeleteEdge(IEdge edge)
         {
             edgeInfos.Remove(edge);
-            this.graph.DeleteEdge(edge);
+            this.instance.DeleteEdge(edge);
         }
 
         private static readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
@@ -118,9 +121,11 @@ namespace GraphMaker.UI
             return JsonConvert.DeserializeObject<UiGraph>(json, jsonSettings);
         }
 
-        public static UiGraph New()
+        public static UiGraph New(GraphChangeEvent handler)
         {
-            return new UiGraph();
+            var graph = new UiGraph();
+            graph.Changed += handler;
+            return graph;
         }
     }
 }

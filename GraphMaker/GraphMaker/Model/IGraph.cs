@@ -2,7 +2,15 @@
 
 namespace GraphMaker.Model
 {
-    public delegate void GraphChangeEvent();
+    public enum GraphOperation
+    {
+        AddNode,
+        AddEdge,
+        DeleteNode,
+        DeleteEdge
+    };
+
+    public delegate void GraphChangeEvent(GraphOperation operation);
 
     public interface IGraph
     {

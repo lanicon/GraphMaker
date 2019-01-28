@@ -29,7 +29,7 @@ namespace GraphMaker
 
         private const int DefaultLength = 1;
 
-        private UiGraph graph = UiGraph.New();
+        private UiGraph graph;
 
         private ClickStates clickState = ClickStates.NoClick;
 
@@ -49,7 +49,13 @@ namespace GraphMaker
 
         public Form1()
         {
-            InitializeComponent();            
+            InitializeComponent();    
+            graph = UiGraph.New(OnGraphUpdate);
+        }
+
+        private void OnGraphUpdate(GraphOperation operation)
+        {
+            MessageBox.Show(operation.ToString());
         }
 
         private void imDrawSpace_MouseDown(object sender, MouseEventArgs e)
@@ -130,12 +136,10 @@ namespace GraphMaker
                         if (selectedNode != null && selectedNode != clickedNode)
                         {
                             IEdge edge = graph.AddEdge(clickedNode, selectedNode, DefaultLength);
-                            cbEdgeSizeChange.Items.Add(edge);
                         }
                         break;
 
                     case ClickStates.Delete:
-                        cbEdgeSizeChange.Items.Remove(clickedEdge);
                         graph.DeleteEdge(clickedEdge);
                         break;
                 }
@@ -356,7 +360,7 @@ namespace GraphMaker
                     SaveGraphToFile();
                     break;
             }
-            graph = UiGraph.New();
+            graph = UiGraph.New(OnGraphUpdate);
             draw();
 
         }
