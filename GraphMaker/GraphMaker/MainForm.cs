@@ -49,7 +49,7 @@ namespace GraphMaker
 
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void imDrawSpace_MouseDown(object sender, MouseEventArgs e)
@@ -483,15 +483,15 @@ namespace GraphMaker
                 int lowestY = edgeInfo.First.Y < edgeInfo.Second.Y ? edgeInfo.First.Y : edgeInfo.Second.Y;
                 Point M = new Point(lowestX + Math.Abs(edgeInfo.First.X - edgeInfo.Second.X) / 2, lowestY + Math.Abs(edgeInfo.First.Y - edgeInfo.Second.Y) / 2);
                 Pen basicPen = new Pen(Color.Black,1);
-                int fontSize = 15;
-                Font font = new Font(FontFamily.GenericSerif, fontSize);
+                int fontSize = 13;
+                Font font = new Font(FontFamily.Families[39], fontSize);  // Font: Cambria
                 string text = edge.Length.ToString();
                 bufferGraphics.DrawString(text, font, basicPen.Brush, M);
 
             }
 
 
-            //отрисовка вершинд
+            //отрисовка вершин
             foreach (var node in graph.Nodes)
             {
                 var nodeInfo = graph.NodeInfos[node];
@@ -502,7 +502,7 @@ namespace GraphMaker
                 Pen basicPen = new Pen(Color.Black);
                 bufferGraphics.DrawEllipse(basicPen, x, y, size, size);
                 int fontSize = 10;
-                Font font = new Font(FontFamily.GenericSerif, fontSize);
+                Font font = new Font(FontFamily.Families[97], fontSize);  // Font: Impact
                 string text = node.Number.ToString();
                 bufferGraphics.DrawString(text, font, basicPen.Brush, nodeInfo.X - text.Length * fontSize / 2, nodeInfo.Y - fontSize / 2);
             }
