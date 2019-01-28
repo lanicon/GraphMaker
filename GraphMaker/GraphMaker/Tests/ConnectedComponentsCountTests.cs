@@ -7,35 +7,13 @@ namespace GraphMaker.Tests
     [TestFixture]
     public class ConnectedComponentsCountTests
     {
-        private const int DefaultLength = 1;
-
-        private IGraph MakeGraph(int nodesCount, params (int First, int Second)[] incidentEdges)
-        {
-            IGraph graph = new Graph();
-
-            for (var i = 0; i < nodesCount; i++)
-            {
-                graph.AddNode();
-            }
-
-            var nodes = graph.Nodes;
-            foreach (var edge in incidentEdges)
-            {
-                var first = nodes[edge.First];
-                var second = nodes[edge.Second];
-                graph.AddEdge(first, second, DefaultLength);
-            }
-
-            return graph;
-        }
-
         [Test, TestCaseSource(typeof(TestsFactory), nameof(TestsFactory.TestCases))]
         public void Test(
             int nodesCount,
             (int First, int Second)[] incidentEdges,
             int expectedCount)
         {
-            var graph = MakeGraph(nodesCount, incidentEdges);
+            var graph = TestHelper.CreateImmutableGraphMock(nodesCount, incidentEdges);
 
             var actualStackCount = graph.CCcountStackDFS();
             Assert.AreEqual(expectedCount, actualStackCount, "CCcountStackDFS");
