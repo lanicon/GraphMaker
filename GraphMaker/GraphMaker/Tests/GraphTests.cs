@@ -113,6 +113,33 @@ namespace GraphMaker.Tests
         }
 
         [Test]
+        public void GraphChanged_ShouldCallDeleteEdgeWhenNodeIsDeleted()
+        {
+            var node1 = graph.AddNode();
+            var node2 = graph.AddNode();
+            var node3 = graph.AddNode();
+            var edge12 = graph.AddEdge(node1, node2);
+            var edge13 = graph.AddEdge(node1, node3);
+
+            var operations = new List<GraphOperation>();
+            var objects = new List<object>();
+            graph.Changed += (operation, obj) =>
+            {
+                operations.Add(operation);
+                objects.Add(obj);
+            };
+
+            graph.DeleteNode(node1);
+
+            operations
+                .Should()
+                .BeEquivalentTo(GraphOperation.DeleteNode, GraphOperation.DeleteEdge, GraphOperation.DeleteEdge);
+            objects
+                .Should()
+                .BeEquivalentTo(node1, edge12, edge13);
+        }
+
+        [Test]
         public void AddEdge_Twice_ShouldNotCreateDuplicates()
         {
             var node1 = graph.AddNode();
