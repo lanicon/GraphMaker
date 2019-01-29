@@ -4,6 +4,7 @@ namespace GraphMaker.Model
 {
     public enum GraphOperation
     {
+        None,
         AddNode,
         AddEdge,
         DeleteNode,

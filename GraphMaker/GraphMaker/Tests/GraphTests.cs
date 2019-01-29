@@ -83,21 +83,33 @@ namespace GraphMaker.Tests
         [Test]
         public void GraphChanged_ShouldBeCalledFromAllMethods()
         {
-            var callsCount = 0;
-            graph.Changed += (operation, obj) => callsCount++;
+            var lastOperation = GraphOperation.None;
+            object lastObject = null;
+            graph.Changed += (operation, obj) =>
+            {
+                lastOperation = operation;
+                lastObject = obj;
+            };
 
             var node1 = graph.AddNode();
+            lastOperation.Should().Be(GraphOperation.AddNode);
+            lastObject.Should().Be(node1);
+
             var node2 = graph.AddNode();
-            callsCount.Should().Be(2, "AddNode didn't call Changed event");
+            lastOperation.Should().Be(GraphOperation.AddNode);
+            lastObject.Should().Be(node2);
 
             var edge12 = graph.AddEdge(node1, node2);
-            callsCount.Should().Be(3, "AddEdge didn't call Changed event");
+            lastOperation.Should().Be(GraphOperation.AddEdge);
+            lastObject.Should().Be(edge12);
 
             graph.DeleteEdge(edge12);
-            callsCount.Should().Be(4, "DeleteEdge didn't call Changed event");
+            lastOperation.Should().Be(GraphOperation.DeleteEdge);
+            lastObject.Should().Be(edge12);
 
             graph.DeleteNode(node1);
-            callsCount.Should().Be(5, "DeleteNode didn't call Changed event");
+            lastOperation.Should().Be(GraphOperation.DeleteNode);
+            lastObject.Should().Be(node1);
         }
 
         [Test]
