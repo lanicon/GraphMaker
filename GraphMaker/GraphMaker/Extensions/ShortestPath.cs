@@ -36,16 +36,18 @@ namespace GraphMaker.Extensions
                 }
                 var iEdges = new List<IEdge>(nodePaths[currentNodeIndex].Node.IncidentEdges);
                 iEdges.Sort((x, y) => x.Length.CompareTo(y.Length));
+                var j = 0;
                 foreach (var incidentEdge in iEdges)
                 {
                     var icidentNodeIndex = incidentEdge.OtherNode(nodePaths[currentNodeIndex].Node).Number;
                     if (!nodePaths.ContainsKey(icidentNodeIndex))
                     {
+                        j++;
                         var newPath = new List<IEdge>(nodePaths[currentNodeIndex].Path)
                         {
                             incidentEdge
                         };
-                        nodes.Add(icidentNodeIndex);
+                        nodes.Insert(i + j, icidentNodeIndex);
                         nodePaths.Add(icidentNodeIndex, 
                             new PathToNode(incidentEdge.OtherNode(nodePaths[currentNodeIndex].Node), 
                             nodePaths[currentNodeIndex].MinimalLenght + incidentEdge.Length, newPath));
@@ -54,6 +56,13 @@ namespace GraphMaker.Extensions
                     {
                         if (incidentEdge.Length + nodePaths[currentNodeIndex].MinimalLenght < nodePaths[icidentNodeIndex].MinimalLenght)
                         {
+                            j++;
+                            if (nodes.FindIndex(x => x == icidentNodeIndex) >= 0)
+                                nodes.Remove(icidentNodeIndex);
+                            if (i + j > nodes.Count)
+                                nodes.Add(icidentNodeIndex);
+                            else
+                                nodes.Insert(i + j, icidentNodeIndex);
                             var newPathToNode = new PathToNode(nodePaths[icidentNodeIndex].Node, 
                                 nodePaths[currentNodeIndex].MinimalLenght + incidentEdge.Length, new List<IEdge>(nodePaths[currentNodeIndex].Path));
                             newPathToNode.Path.Add(incidentEdge);
@@ -65,7 +74,10 @@ namespace GraphMaker.Extensions
                 t.Viseted = true;
                 nodePaths[currentNodeIndex] = t;
             }
-            return nodePaths[end.Number].Path;
+            if (nodePaths.ContainsKey(end.Number))
+                return nodePaths[end.Number].Path;
+            else
+                return null;
         }
     }
 }
