@@ -61,11 +61,11 @@
             // 
             this.trackBarNodeSize.Location = new System.Drawing.Point(6, 27);
             this.trackBarNodeSize.Maximum = 50;
-            this.trackBarNodeSize.Minimum = 10;
+            this.trackBarNodeSize.Minimum = 20;
             this.trackBarNodeSize.Name = "trackBarNodeSize";
             this.trackBarNodeSize.Size = new System.Drawing.Size(104, 45);
             this.trackBarNodeSize.TabIndex = 1;
-            this.trackBarNodeSize.Value = 30;
+            this.trackBarNodeSize.Value = 35;
             this.trackBarNodeSize.ValueChanged += new System.EventHandler(this.trackBarNodeSize_ValueChanged);
             // 
             // imDrawSpace
@@ -250,6 +250,7 @@
             0,
             0});
             this.nudEdgeSizeChange.ValueChanged += new System.EventHandler(this.nudEdgeSizeChange_ValueChanged);
+            this.nudEdgeSizeChange.KeyUp += new System.Windows.Forms.KeyEventHandler(this.nudEdgeSizeChange_KeyUp);
             // 
             // cbEdgeSizeChange
             // 
