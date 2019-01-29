@@ -265,6 +265,16 @@ namespace GraphMaker
             draw();
         }
 
+        private void nudEdgeSizeChange_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (cbEdgeSizeChange.SelectedItem != null)
+            {
+                var changeEdge = (IEdge)cbEdgeSizeChange.SelectedItem;
+                changeEdge.Length = (int)nudEdgeSizeChange.Value;
+            }
+            draw();
+        }
+
         private void RecursiveAlg_Click(object sender, EventArgs e)
         {
             MessageBox.Show(graph.CCcountRecursiveDFS() + " компонент(ы) связности");
@@ -381,6 +391,7 @@ namespace GraphMaker
                     SaveGraphToFile();
                     break;
             }
+            cbEdgeSizeChange.Items.Clear();
             graph = UiGraph.New();
             draw();
 
@@ -466,7 +477,7 @@ namespace GraphMaker
                 var path = 0;
                 foreach (var edge in shortestPath)
                 {
-                    graph.EdgeInfos[edge].Color = Color.Red;
+                    graph.EdgeInfos[edge].Color = Color.Blue;
                     outStr += edge.ToString() + "\n";
                     path += edge.Length;
                 }
@@ -481,24 +492,28 @@ namespace GraphMaker
                 edge.Value.Color = Color.Black;
             }
         }
-
+        
         private void draw()
         {
             var buffer = new Bitmap(imDrawSpace.Width, imDrawSpace.Height);
             var bufferGraphics = Graphics.FromImage(buffer);
             var size = trackBarNodeSize.Value;
-
+            bufferGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             //отрисовка ребер
             foreach (var edge in graph.Edges)
             {
                 var edgeInfo = graph.EdgeInfos[edge];
-                var pen = (edge == selectedEdge) ? new Pen(Color.Red) : new Pen(edgeInfo.Color);
+                int width = (cbEdgeSizeChange.SelectedItem as IEdge == edge) ? 3 : 1;
+                
+                var pen = (edge == selectedEdge) ? new Pen(Color.Red,width) : new Pen(edgeInfo.Color,width);
+
                 bufferGraphics.DrawLine(pen, edgeInfo.First.X, edgeInfo.First.Y, edgeInfo.Second.X, edgeInfo.Second.Y);
+
                 int lowestX = edgeInfo.First.X < edgeInfo.Second.X ? edgeInfo.First.X : edgeInfo.Second.X;
                 int lowestY = edgeInfo.First.Y < edgeInfo.Second.Y ? edgeInfo.First.Y : edgeInfo.Second.Y;
                 Point M = new Point(lowestX + Math.Abs(edgeInfo.First.X - edgeInfo.Second.X) / 2, lowestY + Math.Abs(edgeInfo.First.Y - edgeInfo.Second.Y) / 2);
-                Pen basicPen = new Pen(Color.Black,1);
+                Pen basicPen = new Pen(Color.Black, 1);
                 int fontSize = 13;
                 Font font = new Font(FontFamily.Families[39], fontSize);  // Font: Cambria
                 string text = edge.Length.ToString();
@@ -518,25 +533,11 @@ namespace GraphMaker
                 Pen basicPen = new Pen(Color.Black);
                 bufferGraphics.DrawEllipse(basicPen, x, y, size, size);
                 int fontSize = 10;
-                Font font = new Font(FontFamily.Families[97], fontSize);  // Font: Impact
+                Font font = new Font(FontFamily.Families[95], fontSize);  // Font: Impact
                 string text = node.Number.ToString();
                 bufferGraphics.DrawString(text, font, basicPen.Brush, nodeInfo.X - text.Length * fontSize / 2, nodeInfo.Y - fontSize / 2);
             }
 
-            //отрисовка квадрата вокруг выбранного ребра
-            if (cbEdgeSizeChange.SelectedItem as IEdge != null)
-            {
-                EdgeInfo edgeInfo = graph.EdgeInfos[cbEdgeSizeChange.SelectedItem as IEdge];
-                int x = edgeInfo.First.X < edgeInfo.Second.X ? edgeInfo.First.X : edgeInfo.Second.X;
-                int y = edgeInfo.First.Y < edgeInfo.Second.Y ? edgeInfo.First.Y : edgeInfo.Second.Y;
-                int width = Math.Abs(edgeInfo.First.X - edgeInfo.Second.X);
-                width = width == 0 ? 2 : width;
-                int height = Math.Abs(edgeInfo.First.Y - edgeInfo.Second.Y);
-                height = height == 0 ? 2 : height;
-                Pen pen = new Pen(Color.Blue);
-                Rectangle rect = new Rectangle(x, y, width, height);
-                bufferGraphics.DrawRectangle(pen, rect);
-            }
 
             //в процессе добавления ребра
             if (clickState == ClickStates.Add && nodesEdgesState == NodesEdges.Edges && clickedNode != null)
