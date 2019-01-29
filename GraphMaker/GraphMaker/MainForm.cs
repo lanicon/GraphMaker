@@ -56,7 +56,19 @@ namespace GraphMaker
 
         private void OnGraphUpdate(GraphOperation operation, object obj)
         {
-            MessageBox.Show($"{operation} || {obj}");
+            switch (operation)
+            {
+                case GraphOperation.AddNode:
+                    break;
+                case GraphOperation.AddEdge:
+                    cbEdgeSizeChange.Items.Add(obj);
+                    break;
+                case GraphOperation.DeleteNode:
+                    break;
+                case GraphOperation.DeleteEdge:
+                    cbEdgeSizeChange.Items.Remove(obj);
+                    break;
+            }
         }
 
         private void imDrawSpace_MouseDown(object sender, MouseEventArgs e)
