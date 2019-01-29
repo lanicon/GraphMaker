@@ -287,12 +287,20 @@ namespace GraphMaker
 
         private void RecursiveAlg_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(graph.CCcountRecursiveDFS() + " компонент(ы) связности");
+            var count = graph.CCcountRecursiveDFS();
+            if (count == 1)
+                MessageBox.Show("1 компонента связности.");
+            else
+                MessageBox.Show(count + "компонент(ы) связности.");
         }
 
         private void StackAlg_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(graph.CCcountStackDFS() + " компонент(ы) связности");
+            var count = graph.CCcountStackDFS();
+            if (count == 1)
+                MessageBox.Show("1 компонента связности.");
+            else
+                MessageBox.Show(count + " компонент(ы) связности.");
         }
 
         private void rbNodes_CheckedChanged(object sender, EventArgs e)
@@ -303,19 +311,21 @@ namespace GraphMaker
         private void showComponentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             edgesColorBlack();
-            Color[] colors = { Color.Green, Color.Yellow, Color.Purple, Color.Brown, Color.Pink, Color.Aqua };
+            Color[] colors = { Color.Green, Color.Yellow, Color.Purple, Color.Brown, Color.Pink, Color.Aqua,
+            Color.AntiqueWhite, Color.Crimson, Color.DarkGray, Color.DarkOrange, Color.DeepPink, Color.DarkViolet,
+            Color.DeepSkyBlue, Color.Fuchsia, Color.Gold, Color.IndianRed, Color.Lime, Color.Maroon};
             var listOfComponents = graph.GetListOfComponents();
-            string answer = string.Empty;
+            //string answer = string.Empty;
             int i=0;
             foreach (var component in listOfComponents)
             {
-                answer += "компонента: ";
+                //answer += "компонента: ";
                 foreach (var node in component)
                 {
-                    answer += node.Number + " ";
+                    //answer += node.Number + " ";
                     graph.NodeInfos[node].Color = colors[i];
                 }
-                answer += "\n";
+                //answer += "\n";
 
                 if (i == (colors.Length - 1))
                     i = 0;
@@ -323,7 +333,11 @@ namespace GraphMaker
                     i++;
             }
             draw();
-            MessageBox.Show(listOfComponents.Count + " компонент(ы) связности\n" + answer);
+            var count = listOfComponents.Count;
+            if (count == 1)
+                MessageBox.Show("1 компонента связности.");
+            else
+                MessageBox.Show(count + " компонент(ы) связности.");
         }
 
         private void MST_Click(object sender, EventArgs e)
@@ -428,7 +442,7 @@ namespace GraphMaker
                 this.imDrawSpace.MouseClick -= new System.Windows.Forms.MouseEventHandler(this.selectNodes);
                 shortestPath_ToolMenuStrip.BackColor = Color.White;
                 gbShortestPath.Visible = false;
-                MessageBox.Show("Выбор вершин отменен");
+                MessageBox.Show("Выбор вершин отменен.");
             }
             else
             {
@@ -483,7 +497,7 @@ namespace GraphMaker
             shortestPath_ToolMenuStrip.BackColor = Color.White;
             if (shortestPath == null)
             {
-                MessageBox.Show("Между данными вершинами нет пути");
+                MessageBox.Show("Между данными вершинами нет пути.");
             }
             else
             {
@@ -495,7 +509,7 @@ namespace GraphMaker
                     outStr += edge.ToString() + " (" + edge.Length + ")\n";
                     path += edge.Length;
                 }
-                MessageBox.Show("Кратчайший путь: " + path + "\n" + outStr);
+                MessageBox.Show("Длина кратчайшего пути = " + path + "\n" + outStr);
             }            
         }
 
