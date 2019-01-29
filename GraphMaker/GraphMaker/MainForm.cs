@@ -282,7 +282,7 @@ namespace GraphMaker
 
         private void showComponentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            edgesColorBlack();
             Color[] colors = { Color.Green, Color.Yellow, Color.Purple, Color.Brown, Color.Pink, Color.Aqua };
             var listOfComponents = graph.GetListOfComponents();
             string answer = string.Empty;
@@ -305,6 +305,23 @@ namespace GraphMaker
             draw();
             MessageBox.Show(listOfComponents.Count + " компонент(ы) связности\n" + answer);
         }
+
+        private void MST_Click(object sender, EventArgs e)
+        {
+            edgesColorBlack();
+            var minTree = graph.MinTreePrim();
+            foreach (var node in graph.Nodes)
+                graph.NodeInfos[node].Color = Color.White;
+
+            Color color = Color.Blue;
+            if (minTree != null)
+                foreach (var edge in minTree)
+                {
+                    var edgeInfo = graph.EdgeInfos[edge];
+                    edgeInfo.Color = color;
+                }
+        }
+
         private void SaveFile_Click(object sender, EventArgs e)
         {
             SaveGraphToFile();
@@ -368,20 +385,6 @@ namespace GraphMaker
             draw();
 
         }
-        private void нахождениеМинимальногоОстовногоДереваToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var minTree = graph.MinTreePrim();
-            foreach(var node in graph.Nodes)
-                graph.NodeInfos[node].Color = Color.White;
-
-            Color color = Color.Blue;
-            if (minTree != null)
-                foreach (var edge in minTree)
-                {
-                    var edgeInfo = graph.EdgeInfos[edge];
-                    edgeInfo.Color = color;
-                }
-        }
 
         private INode spSelectedNode1;
         private INode spSelectedNode2;
@@ -389,10 +392,7 @@ namespace GraphMaker
 
         private void shortestPath_Click(object sender, EventArgs e)
         {
-            foreach(var edge in graph.EdgeInfos)
-            {
-                edge.Value.Color = Color.Black;
-            }
+            edgesColorBlack();
             foreach (var node in graph.NodeInfos)
             {
                 node.Value.Color = Color.White;
@@ -471,6 +471,14 @@ namespace GraphMaker
                     path += edge.Length;
                 }
                 MessageBox.Show("Кратчайший путь: " + path + "\n" + outStr);
+            }
+        }
+
+        private void edgesColorBlack()
+        {
+            foreach (var edge in graph.EdgeInfos)
+            {
+                edge.Value.Color = Color.Black;
             }
         }
 

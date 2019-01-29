@@ -38,7 +38,7 @@
             this.OpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveFile = new System.Windows.Forms.ToolStripMenuItem();
             this.shortestPath_ToolMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MST = new System.Windows.Forms.ToolStripMenuItem();
             this.нахождениеКоличестваКомпонентСвязностиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RecursiveAlg = new System.Windows.Forms.ToolStripMenuItem();
             this.StackAlg = new System.Windows.Forms.ToolStripMenuItem();
@@ -113,7 +113,7 @@
             this.msGraphMaker.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.shortestPath_ToolMenuStrip,
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem,
+            this.MST,
             this.нахождениеКоличестваКомпонентСвязностиToolStripMenuItem});
             this.msGraphMaker.Location = new System.Drawing.Point(0, 0);
             this.msGraphMaker.Name = "msGraphMaker";
@@ -159,12 +159,12 @@
             this.shortestPath_ToolMenuStrip.Text = "Нахождение минимального расстояния";
             this.shortestPath_ToolMenuStrip.Click += new System.EventHandler(this.shortestPath_Click);
             // 
-            // нахождениеМинимальногоОстовногоДереваToolStripMenuItem
+            // MST
             // 
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Name = "нахождениеМинимальногоОстовногоДереваToolStripMenuItem";
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Size = new System.Drawing.Size(274, 20);
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Text = "Нахождение минимального остовного дерева";
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Click += new System.EventHandler(this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem_Click);
+            this.MST.Name = "MST";
+            this.MST.Size = new System.Drawing.Size(274, 20);
+            this.MST.Text = "Нахождение минимального остовного дерева";
+            this.MST.Click += new System.EventHandler(this.MST_Click);
             // 
             // нахождениеКоличестваКомпонентСвязностиToolStripMenuItem
             // 
@@ -302,7 +302,7 @@
         private System.Windows.Forms.MenuStrip msGraphMaker;
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shortestPath_ToolMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem нахождениеМинимальногоОстовногоДереваToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MST;
         private System.Windows.Forms.ToolStripMenuItem нахождениеКоличестваКомпонентСвязностиToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CreateNewFile;
         private System.Windows.Forms.ToolStripMenuItem OpenFile;
