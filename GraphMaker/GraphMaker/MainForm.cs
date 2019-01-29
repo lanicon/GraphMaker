@@ -492,7 +492,7 @@ namespace GraphMaker
                 foreach (var edge in shortestPath)
                 {
                     graph.EdgeInfos[edge].Color = Color.Blue;
-                    outStr += edge.ToString() + "\n";
+                    outStr += edge.ToString() + " (" + edge.Length + ")\n";
                     path += edge.Length;
                 }
                 MessageBox.Show("Кратчайший путь: " + path + "\n" + outStr);
