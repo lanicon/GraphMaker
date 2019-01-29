@@ -150,11 +150,6 @@ namespace GraphMaker
                     case ClickStates.Delete:
                         if (clickedNode != null)
                         {
-                            for (var i = clickedNode.IncidentEdges.Count - 1; i >= 0; i--)
-                            {
-                                var clickedEdge = clickedNode.IncidentEdges[i];
-                                cbEdgeSizeChange.Items.Remove(clickedEdge);
-                            }
                             graph.DeleteNode(clickedNode);
                         }
                         break;
