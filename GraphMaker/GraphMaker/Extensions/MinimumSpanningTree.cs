@@ -35,7 +35,7 @@ namespace GraphMaker.Extensions
             {
                 sum += edge.Length;
             }
-            string temp = "Минимальная длина остовного дерева = " + sum.ToString()+"\n";
+            string temp = "Минимальная длина остовного дерева = " + sum.ToString() + "\n";
             foreach (var edge in edges)
             {
                 temp += edge.ToString() + " (" + edge.Length + ")\n";

@@ -38,7 +38,7 @@
             this.OpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveFile = new System.Windows.Forms.ToolStripMenuItem();
             this.shortestPath_ToolMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MST = new System.Windows.Forms.ToolStripMenuItem();
             this.нахождениеКоличестваКомпонентСвязностиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RecursiveAlg = new System.Windows.Forms.ToolStripMenuItem();
             this.StackAlg = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,6 +48,8 @@
             this.gbEdgeSizeChange = new System.Windows.Forms.GroupBox();
             this.nudEdgeSizeChange = new System.Windows.Forms.NumericUpDown();
             this.cbEdgeSizeChange = new System.Windows.Forms.ComboBox();
+            this.tbShortestPath = new System.Windows.Forms.TextBox();
+            this.gbShortestPath = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarNodeSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imDrawSpace)).BeginInit();
             this.msGraphMaker.SuspendLayout();
@@ -55,17 +57,18 @@
             this.gbNodeSize.SuspendLayout();
             this.gbEdgeSizeChange.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEdgeSizeChange)).BeginInit();
+            this.gbShortestPath.SuspendLayout();
             this.SuspendLayout();
             // 
             // trackBarNodeSize
             // 
             this.trackBarNodeSize.Location = new System.Drawing.Point(6, 27);
             this.trackBarNodeSize.Maximum = 50;
-            this.trackBarNodeSize.Minimum = 10;
+            this.trackBarNodeSize.Minimum = 20;
             this.trackBarNodeSize.Name = "trackBarNodeSize";
             this.trackBarNodeSize.Size = new System.Drawing.Size(104, 45);
             this.trackBarNodeSize.TabIndex = 1;
-            this.trackBarNodeSize.Value = 30;
+            this.trackBarNodeSize.Value = 35;
             this.trackBarNodeSize.ValueChanged += new System.EventHandler(this.trackBarNodeSize_ValueChanged);
             // 
             // imDrawSpace
@@ -113,7 +116,7 @@
             this.msGraphMaker.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.shortestPath_ToolMenuStrip,
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem,
+            this.MST,
             this.нахождениеКоличестваКомпонентСвязностиToolStripMenuItem});
             this.msGraphMaker.Location = new System.Drawing.Point(0, 0);
             this.msGraphMaker.Name = "msGraphMaker";
@@ -159,12 +162,12 @@
             this.shortestPath_ToolMenuStrip.Text = "Нахождение минимального расстояния";
             this.shortestPath_ToolMenuStrip.Click += new System.EventHandler(this.shortestPath_Click);
             // 
-            // нахождениеМинимальногоОстовногоДереваToolStripMenuItem
+            // MST
             // 
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Name = "нахождениеМинимальногоОстовногоДереваToolStripMenuItem";
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Size = new System.Drawing.Size(274, 20);
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Text = "Нахождение минимального остовного дерева";
-            this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem.Click += new System.EventHandler(this.нахождениеМинимальногоОстовногоДереваToolStripMenuItem_Click);
+            this.MST.Name = "MST";
+            this.MST.Size = new System.Drawing.Size(274, 20);
+            this.MST.Text = "Нахождение минимального остовного дерева";
+            this.MST.Click += new System.EventHandler(this.MST_Click);
             // 
             // нахождениеКоличестваКомпонентСвязностиToolStripMenuItem
             // 
@@ -250,6 +253,7 @@
             0,
             0});
             this.nudEdgeSizeChange.ValueChanged += new System.EventHandler(this.nudEdgeSizeChange_ValueChanged);
+            this.nudEdgeSizeChange.KeyUp += new System.Windows.Forms.KeyEventHandler(this.nudEdgeSizeChange_KeyUp);
             // 
             // cbEdgeSizeChange
             // 
@@ -264,12 +268,32 @@
             this.cbEdgeSizeChange.TabIndex = 0;
             this.cbEdgeSizeChange.SelectedIndexChanged += new System.EventHandler(this.cbEdgeSizeChange_SelectedIndexChanged);
             // 
+            // tbShortestPath
+            // 
+            this.tbShortestPath.Location = new System.Drawing.Point(6, 19);
+            this.tbShortestPath.Multiline = true;
+            this.tbShortestPath.Name = "tbShortestPath";
+            this.tbShortestPath.Size = new System.Drawing.Size(198, 53);
+            this.tbShortestPath.TabIndex = 9;
+            // 
+            // gbShortestPath
+            // 
+            this.gbShortestPath.Controls.Add(this.tbShortestPath);
+            this.gbShortestPath.Location = new System.Drawing.Point(359, 27);
+            this.gbShortestPath.Name = "gbShortestPath";
+            this.gbShortestPath.Size = new System.Drawing.Size(210, 78);
+            this.gbShortestPath.TabIndex = 10;
+            this.gbShortestPath.TabStop = false;
+            this.gbShortestPath.Text = "Кратчайший путь";
+            this.gbShortestPath.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(850, 553);
+            this.Controls.Add(this.gbShortestPath);
             this.Controls.Add(this.gbEdgeSizeChange);
             this.Controls.Add(this.gbNodeSize);
             this.Controls.Add(this.gbRadioButtons);
@@ -289,6 +313,8 @@
             this.gbNodeSize.PerformLayout();
             this.gbEdgeSizeChange.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudEdgeSizeChange)).EndInit();
+            this.gbShortestPath.ResumeLayout(false);
+            this.gbShortestPath.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -302,7 +328,7 @@
         private System.Windows.Forms.MenuStrip msGraphMaker;
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shortestPath_ToolMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem нахождениеМинимальногоОстовногоДереваToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MST;
         private System.Windows.Forms.ToolStripMenuItem нахождениеКоличестваКомпонентСвязностиToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CreateNewFile;
         private System.Windows.Forms.ToolStripMenuItem OpenFile;
@@ -315,6 +341,8 @@
         private System.Windows.Forms.ToolStripMenuItem RecursiveAlg;
         private System.Windows.Forms.ToolStripMenuItem StackAlg;
         private System.Windows.Forms.ToolStripMenuItem showComponentsToolStripMenuItem;
+        private System.Windows.Forms.TextBox tbShortestPath;
+        private System.Windows.Forms.GroupBox gbShortestPath;
     }
 }
 

@@ -47,11 +47,22 @@ namespace GraphMaker
 
         private IEdge clickedEdge;
 
+        private int fontImpactId = 3, fontCambriaId = 3;
+
         public Form1()
         {
-            InitializeComponent();    
+            InitializeComponent();
+
             graph = UiGraph.New();
             graph.Changed += OnGraphUpdate;
+
+            for (int i = 0; i < FontFamily.Families.Length; i++)
+            {
+                if (FontFamily.Families[i].Name == "Impact")
+                    fontImpactId = i;
+                if (FontFamily.Families[i].Name == "Cambria")
+                    fontCambriaId = i;
+            }
         }
 
         private void OnGraphUpdate(GraphOperation operation, object obj)
@@ -137,7 +148,15 @@ namespace GraphMaker
                         clickedNode = graph.AddNode(x, y, Color.White);
                         break;
                     case ClickStates.Delete:
-                        if (clickedNode != null) graph.DeleteNode(clickedNode);
+                        if (clickedNode != null)
+                        {
+                            for (var i = clickedNode.IncidentEdges.Count - 1; i >= 0; i--)
+                            {
+                                var clickedEdge = clickedNode.IncidentEdges[i];
+                                cbEdgeSizeChange.Items.Remove(clickedEdge);
+                            }
+                            graph.DeleteNode(clickedNode);
+                        }
                         break;
                     case ClickStates.Move:
                         break;
@@ -274,14 +293,32 @@ namespace GraphMaker
             draw();
         }
 
+        private void nudEdgeSizeChange_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (cbEdgeSizeChange.SelectedItem != null)
+            {
+                var changeEdge = (IEdge)cbEdgeSizeChange.SelectedItem;
+                changeEdge.Length = (int)nudEdgeSizeChange.Value;
+            }
+            draw();
+        }
+
         private void RecursiveAlg_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(graph.CCcountRecursiveDFS() + " компонент(ы) связности");
+            var count = graph.CCcountRecursiveDFS();
+            if (count == 1)
+                MessageBox.Show("1 компонента связности.");
+            else
+                MessageBox.Show(count + "компонент(ы) связности.");
         }
 
         private void StackAlg_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(graph.CCcountStackDFS() + " компонент(ы) связности");
+            var count = graph.CCcountStackDFS();
+            if (count == 1)
+                MessageBox.Show("1 компонента связности.");
+            else
+                MessageBox.Show(count + " компонент(ы) связности.");
         }
 
         private void rbNodes_CheckedChanged(object sender, EventArgs e)
@@ -291,20 +328,22 @@ namespace GraphMaker
 
         private void showComponentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            Color[] colors = { Color.Green, Color.Yellow, Color.Purple, Color.Brown, Color.Pink, Color.Aqua };
+            edgesColorBlack();
+            Color[] colors = { Color.Green, Color.Yellow, Color.Purple, Color.Brown, Color.Pink, Color.Aqua,
+            Color.AntiqueWhite, Color.Crimson, Color.DarkGray, Color.DarkOrange, Color.DeepPink, Color.DarkViolet,
+            Color.DeepSkyBlue, Color.Fuchsia, Color.Gold, Color.IndianRed, Color.Lime, Color.Maroon};
             var listOfComponents = graph.GetListOfComponents();
-            string answer = string.Empty;
+            //string answer = string.Empty;
             int i=0;
             foreach (var component in listOfComponents)
             {
-                answer += "компонента: ";
+                //answer += "компонента: ";
                 foreach (var node in component)
                 {
-                    answer += node.Number + " ";
+                    //answer += node.Number + " ";
                     graph.NodeInfos[node].Color = colors[i];
                 }
-                answer += "\n";
+                //answer += "\n";
 
                 if (i == (colors.Length - 1))
                     i = 0;
@@ -312,8 +351,29 @@ namespace GraphMaker
                     i++;
             }
             draw();
-            MessageBox.Show(listOfComponents.Count + " компонент(ы) связности\n" + answer);
+            var count = listOfComponents.Count;
+            if (count == 1)
+                MessageBox.Show("1 компонента связности.");
+            else
+                MessageBox.Show(count + " компонент(ы) связности.");
         }
+
+        private void MST_Click(object sender, EventArgs e)
+        {
+            edgesColorBlack();
+            var minTree = graph.MinTreePrim();
+            foreach (var node in graph.Nodes)
+                graph.NodeInfos[node].Color = Color.White;
+
+            Color color = Color.Blue;
+            if (minTree != null)
+                foreach (var edge in minTree)
+                {
+                    var edgeInfo = graph.EdgeInfos[edge];
+                    edgeInfo.Color = color;
+                }
+        }
+
         private void SaveFile_Click(object sender, EventArgs e)
         {
             SaveGraphToFile();
@@ -374,24 +434,11 @@ namespace GraphMaker
                     SaveGraphToFile();
                     break;
             }
+            cbEdgeSizeChange.Items.Clear();
             graph = UiGraph.New();
             graph.Changed += OnGraphUpdate;
             draw();
 
-        }
-        private void нахождениеМинимальногоОстовногоДереваToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var minTree = graph.MinTreePrim();
-            foreach(var node in graph.Nodes)
-                graph.NodeInfos[node].Color = Color.White;
-
-            Color color = Color.Blue;
-            if (minTree != null)
-                foreach (var edge in minTree)
-                {
-                    var edgeInfo = graph.EdgeInfos[edge];
-                    edgeInfo.Color = color;
-                }
         }
 
         private INode spSelectedNode1;
@@ -400,10 +447,7 @@ namespace GraphMaker
 
         private void shortestPath_Click(object sender, EventArgs e)
         {
-            foreach(var edge in graph.EdgeInfos)
-            {
-                edge.Value.Color = Color.Black;
-            }
+            edgesColorBlack();
             foreach (var node in graph.NodeInfos)
             {
                 node.Value.Color = Color.White;
@@ -417,7 +461,8 @@ namespace GraphMaker
                 this.imDrawSpace.MouseUp += new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseUp);
                 this.imDrawSpace.MouseClick -= new System.Windows.Forms.MouseEventHandler(this.selectNodes);
                 shortestPath_ToolMenuStrip.BackColor = Color.White;
-                MessageBox.Show("Выбор вершин отменен");
+                gbShortestPath.Visible = false;
+                MessageBox.Show("Выбор вершин отменен.");
             }
             else
             {
@@ -426,7 +471,9 @@ namespace GraphMaker
                 this.imDrawSpace.MouseUp -= new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseUp);
                 this.imDrawSpace.MouseClick += new System.Windows.Forms.MouseEventHandler(this.selectNodes);
                 shortestPath_ToolMenuStrip.BackColor = Color.Red;
-                MessageBox.Show("Выберите первую вершину \nДля отмены нажмите кнопку еще раз");
+                gbShortestPath.Visible = true;
+                tbShortestPath.Text = @"Выберите первую вершину.
+Для отмены нажмите кнопку еще раз.";
             }
         }
         
@@ -440,13 +487,13 @@ namespace GraphMaker
                     {
                         spSelectedNode1 = selectedNode;
                         graph.NodeInfos[spSelectedNode1].Color = Color.Green;
-                        MessageBox.Show("Выберите вторую вершину");
+                        tbShortestPath.Text = "Выберите вторую вершину.";
                     }
                     else
                     {
                         if (selectedNode == spSelectedNode1)
                         {
-                            MessageBox.Show("Выберите другую вершину");
+                            tbShortestPath.Text = "Выберите другую вершину.";
                         }
                         else
                         {
@@ -461,6 +508,7 @@ namespace GraphMaker
 
         private void findShortestPath()
         {
+            gbShortestPath.Visible = false;
             selectionMode = false;
             this.imDrawSpace.MouseDown += new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseDown);
             this.imDrawSpace.MouseUp += new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseUp);
@@ -469,7 +517,7 @@ namespace GraphMaker
             shortestPath_ToolMenuStrip.BackColor = Color.White;
             if (shortestPath == null)
             {
-                MessageBox.Show("Между данными вершинами нет пути");
+                MessageBox.Show("Между данными вершинами нет пути.");
             }
             else
             {
@@ -477,33 +525,45 @@ namespace GraphMaker
                 var path = 0;
                 foreach (var edge in shortestPath)
                 {
-                    graph.EdgeInfos[edge].Color = Color.Red;
-                    outStr += edge.ToString() + "\n";
+                    graph.EdgeInfos[edge].Color = Color.Blue;
+                    outStr += edge.ToString() + " (" + edge.Length + ")\n";
                     path += edge.Length;
                 }
-                MessageBox.Show("Кратчайший путь: " + path + "\n" + outStr);
-            }
+                MessageBox.Show("Длина кратчайшего пути = " + path + "\n" + outStr);
+            }            
         }
 
+        private void edgesColorBlack()
+        {
+            foreach (var edge in graph.EdgeInfos)
+            {
+                edge.Value.Color = Color.Black;
+            }
+        }
+        
         private void draw()
         {
             var buffer = new Bitmap(imDrawSpace.Width, imDrawSpace.Height);
             var bufferGraphics = Graphics.FromImage(buffer);
             var size = trackBarNodeSize.Value;
-
+            bufferGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             //отрисовка ребер
             foreach (var edge in graph.Edges)
             {
                 var edgeInfo = graph.EdgeInfos[edge];
-                var pen = (edge == selectedEdge) ? new Pen(Color.Red) : new Pen(edgeInfo.Color);
+                int width = (cbEdgeSizeChange.SelectedItem as IEdge == edge) ? 3 : 1;
+                
+                var pen = (edge == selectedEdge) ? new Pen(Color.Red,width) : new Pen(edgeInfo.Color,width);
+
                 bufferGraphics.DrawLine(pen, edgeInfo.First.X, edgeInfo.First.Y, edgeInfo.Second.X, edgeInfo.Second.Y);
+
                 int lowestX = edgeInfo.First.X < edgeInfo.Second.X ? edgeInfo.First.X : edgeInfo.Second.X;
                 int lowestY = edgeInfo.First.Y < edgeInfo.Second.Y ? edgeInfo.First.Y : edgeInfo.Second.Y;
                 Point M = new Point(lowestX + Math.Abs(edgeInfo.First.X - edgeInfo.Second.X) / 2, lowestY + Math.Abs(edgeInfo.First.Y - edgeInfo.Second.Y) / 2);
-                Pen basicPen = new Pen(Color.Black,1);
+                Pen basicPen = new Pen(Color.Black, 1);
                 int fontSize = 13;
-                Font font = new Font(FontFamily.Families[39], fontSize);  // Font: Cambria
+                Font font = new Font(FontFamily.Families[fontCambriaId], fontSize);  // Font: Cambria
                 string text = edge.Length.ToString();
                 bufferGraphics.DrawString(text, font, basicPen.Brush, M);
 
@@ -521,25 +581,11 @@ namespace GraphMaker
                 Pen basicPen = new Pen(Color.Black);
                 bufferGraphics.DrawEllipse(basicPen, x, y, size, size);
                 int fontSize = 10;
-                Font font = new Font(FontFamily.Families[97], fontSize);  // Font: Impact
+                Font font = new Font(FontFamily.Families[fontImpactId], fontSize);  // Font: Impact
                 string text = node.Number.ToString();
                 bufferGraphics.DrawString(text, font, basicPen.Brush, nodeInfo.X - text.Length * fontSize / 2, nodeInfo.Y - fontSize / 2);
             }
 
-            //отрисовка квадрата вокруг выбранного ребра
-            if (cbEdgeSizeChange.SelectedItem as IEdge != null)
-            {
-                EdgeInfo edgeInfo = graph.EdgeInfos[cbEdgeSizeChange.SelectedItem as IEdge];
-                int x = edgeInfo.First.X < edgeInfo.Second.X ? edgeInfo.First.X : edgeInfo.Second.X;
-                int y = edgeInfo.First.Y < edgeInfo.Second.Y ? edgeInfo.First.Y : edgeInfo.Second.Y;
-                int width = Math.Abs(edgeInfo.First.X - edgeInfo.Second.X);
-                width = width == 0 ? 2 : width;
-                int height = Math.Abs(edgeInfo.First.Y - edgeInfo.Second.Y);
-                height = height == 0 ? 2 : height;
-                Pen pen = new Pen(Color.Blue);
-                Rectangle rect = new Rectangle(x, y, width, height);
-                bufferGraphics.DrawRectangle(pen, rect);
-            }
 
             //в процессе добавления ребра
             if (clickState == ClickStates.Add && nodesEdgesState == NodesEdges.Edges && clickedNode != null)
