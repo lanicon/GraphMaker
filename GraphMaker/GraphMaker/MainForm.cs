@@ -50,12 +50,13 @@ namespace GraphMaker
         public Form1()
         {
             InitializeComponent();    
-            graph = UiGraph.New(OnGraphUpdate);
+            graph = UiGraph.New();
+            graph.Changed += OnGraphUpdate;
         }
 
-        private void OnGraphUpdate(GraphOperation operation)
+        private void OnGraphUpdate(GraphOperation operation, object obj)
         {
-            MessageBox.Show(operation.ToString());
+            MessageBox.Show($"{operation} || {obj}");
         }
 
         private void imDrawSpace_MouseDown(object sender, MouseEventArgs e)
@@ -337,6 +338,7 @@ namespace GraphMaker
                     var fileName = openFileDialog.FileName;
                     var json = File.ReadAllText(fileName);
                     graph = UiGraph.Deserialize(json);
+                    graph.Changed += OnGraphUpdate;
                     selectedEdge = null;
                     clickedEdge = null;
                     cbEdgeSizeChange.Items.Clear();
@@ -360,7 +362,8 @@ namespace GraphMaker
                     SaveGraphToFile();
                     break;
             }
-            graph = UiGraph.New(OnGraphUpdate);
+            graph = UiGraph.New();
+            graph.Changed += OnGraphUpdate;
             draw();
 
         }

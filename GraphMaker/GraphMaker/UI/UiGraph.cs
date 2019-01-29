@@ -27,8 +27,8 @@ namespace GraphMaker.UI
 
         public event GraphChangeEvent Changed
         {
-            add { this.instance.Changed += value; }
-            remove { this.instance.Changed -= value; }
+            add    => this.instance.Changed += value;
+            remove => this.instance.Changed -= value;
         }
 
         [JsonIgnore]
@@ -121,11 +121,9 @@ namespace GraphMaker.UI
             return JsonConvert.DeserializeObject<UiGraph>(json, jsonSettings);
         }
 
-        public static UiGraph New(GraphChangeEvent handler)
+        public static UiGraph New()
         {
-            var graph = new UiGraph();
-            graph.Changed += handler;
-            return graph;
+            return new UiGraph();
         }
     }
 }

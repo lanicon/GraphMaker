@@ -84,7 +84,7 @@ namespace GraphMaker.Tests
         public void GraphChanged_ShouldBeCalledFromAllMethods()
         {
             var callsCount = 0;
-            graph.Changed += operation => callsCount++;
+            graph.Changed += (operation, obj) => callsCount++;
 
             var node1 = graph.AddNode();
             var node2 = graph.AddNode();

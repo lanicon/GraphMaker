@@ -10,7 +10,7 @@ namespace GraphMaker.Model
         DeleteEdge
     };
 
-    public delegate void GraphChangeEvent(GraphOperation operation);
+    public delegate void GraphChangeEvent(GraphOperation operation, object obj);
 
     public interface IGraph
     {
