@@ -47,9 +47,19 @@ namespace GraphMaker
 
         private IEdge clickedEdge;
 
+        private int fontImpactId = 3, fontCambriaId = 3;
+
         public Form1()
         {
-            InitializeComponent();            
+            InitializeComponent();
+
+            for (int i = 0; i < FontFamily.Families.Length; i++)
+            {
+                if (FontFamily.Families[i].Name == "Impact")
+                    fontImpactId = i;
+                if (FontFamily.Families[i].Name == "Cambria")
+                    fontCambriaId = i;
+            }
         }
 
         private void imDrawSpace_MouseDown(object sender, MouseEventArgs e)
@@ -417,6 +427,7 @@ namespace GraphMaker
                 this.imDrawSpace.MouseUp += new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseUp);
                 this.imDrawSpace.MouseClick -= new System.Windows.Forms.MouseEventHandler(this.selectNodes);
                 shortestPath_ToolMenuStrip.BackColor = Color.White;
+                gbShortestPath.Visible = false;
                 MessageBox.Show("Выбор вершин отменен");
             }
             else
@@ -426,7 +437,9 @@ namespace GraphMaker
                 this.imDrawSpace.MouseUp -= new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseUp);
                 this.imDrawSpace.MouseClick += new System.Windows.Forms.MouseEventHandler(this.selectNodes);
                 shortestPath_ToolMenuStrip.BackColor = Color.Red;
-                MessageBox.Show("Выберите первую вершину \nДля отмены нажмите кнопку еще раз");
+                gbShortestPath.Visible = true;
+                tbShortestPath.Text = @"Выберите первую вершину.
+Для отмены нажмите кнопку еще раз.";
             }
         }
         
@@ -440,13 +453,13 @@ namespace GraphMaker
                     {
                         spSelectedNode1 = selectedNode;
                         graph.NodeInfos[spSelectedNode1].Color = Color.Green;
-                        MessageBox.Show("Выберите вторую вершину");
+                        tbShortestPath.Text = "Выберите вторую вершину.";
                     }
                     else
                     {
                         if (selectedNode == spSelectedNode1)
                         {
-                            MessageBox.Show("Выберите другую вершину");
+                            tbShortestPath.Text = "Выберите другую вершину.";
                         }
                         else
                         {
@@ -461,6 +474,7 @@ namespace GraphMaker
 
         private void findShortestPath()
         {
+            gbShortestPath.Visible = false;
             selectionMode = false;
             this.imDrawSpace.MouseDown += new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseDown);
             this.imDrawSpace.MouseUp += new System.Windows.Forms.MouseEventHandler(this.imDrawSpace_MouseUp);
@@ -482,7 +496,7 @@ namespace GraphMaker
                     path += edge.Length;
                 }
                 MessageBox.Show("Кратчайший путь: " + path + "\n" + outStr);
-            }
+            }            
         }
 
         private void edgesColorBlack()
@@ -515,7 +529,7 @@ namespace GraphMaker
                 Point M = new Point(lowestX + Math.Abs(edgeInfo.First.X - edgeInfo.Second.X) / 2, lowestY + Math.Abs(edgeInfo.First.Y - edgeInfo.Second.Y) / 2);
                 Pen basicPen = new Pen(Color.Black, 1);
                 int fontSize = 13;
-                Font font = new Font(FontFamily.Families[39], fontSize);  // Font: Cambria
+                Font font = new Font(FontFamily.Families[fontCambriaId], fontSize);  // Font: Cambria
                 string text = edge.Length.ToString();
                 bufferGraphics.DrawString(text, font, basicPen.Brush, M);
 
@@ -533,7 +547,7 @@ namespace GraphMaker
                 Pen basicPen = new Pen(Color.Black);
                 bufferGraphics.DrawEllipse(basicPen, x, y, size, size);
                 int fontSize = 10;
-                Font font = new Font(FontFamily.Families[95], fontSize);  // Font: Impact
+                Font font = new Font(FontFamily.Families[fontImpactId], fontSize);  // Font: Impact
                 string text = node.Number.ToString();
                 bufferGraphics.DrawString(text, font, basicPen.Brush, nodeInfo.X - text.Length * fontSize / 2, nodeInfo.Y - fontSize / 2);
             }

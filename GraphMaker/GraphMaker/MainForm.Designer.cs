@@ -48,6 +48,8 @@
             this.gbEdgeSizeChange = new System.Windows.Forms.GroupBox();
             this.nudEdgeSizeChange = new System.Windows.Forms.NumericUpDown();
             this.cbEdgeSizeChange = new System.Windows.Forms.ComboBox();
+            this.tbShortestPath = new System.Windows.Forms.TextBox();
+            this.gbShortestPath = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarNodeSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imDrawSpace)).BeginInit();
             this.msGraphMaker.SuspendLayout();
@@ -55,6 +57,7 @@
             this.gbNodeSize.SuspendLayout();
             this.gbEdgeSizeChange.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEdgeSizeChange)).BeginInit();
+            this.gbShortestPath.SuspendLayout();
             this.SuspendLayout();
             // 
             // trackBarNodeSize
@@ -265,12 +268,32 @@
             this.cbEdgeSizeChange.TabIndex = 0;
             this.cbEdgeSizeChange.SelectedIndexChanged += new System.EventHandler(this.cbEdgeSizeChange_SelectedIndexChanged);
             // 
+            // tbShortestPath
+            // 
+            this.tbShortestPath.Location = new System.Drawing.Point(6, 19);
+            this.tbShortestPath.Multiline = true;
+            this.tbShortestPath.Name = "tbShortestPath";
+            this.tbShortestPath.Size = new System.Drawing.Size(198, 53);
+            this.tbShortestPath.TabIndex = 9;
+            // 
+            // gbShortestPath
+            // 
+            this.gbShortestPath.Controls.Add(this.tbShortestPath);
+            this.gbShortestPath.Location = new System.Drawing.Point(359, 27);
+            this.gbShortestPath.Name = "gbShortestPath";
+            this.gbShortestPath.Size = new System.Drawing.Size(210, 78);
+            this.gbShortestPath.TabIndex = 10;
+            this.gbShortestPath.TabStop = false;
+            this.gbShortestPath.Text = "Кратчайший путь";
+            this.gbShortestPath.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(850, 553);
+            this.Controls.Add(this.gbShortestPath);
             this.Controls.Add(this.gbEdgeSizeChange);
             this.Controls.Add(this.gbNodeSize);
             this.Controls.Add(this.gbRadioButtons);
@@ -290,6 +313,8 @@
             this.gbNodeSize.PerformLayout();
             this.gbEdgeSizeChange.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudEdgeSizeChange)).EndInit();
+            this.gbShortestPath.ResumeLayout(false);
+            this.gbShortestPath.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -316,6 +341,8 @@
         private System.Windows.Forms.ToolStripMenuItem RecursiveAlg;
         private System.Windows.Forms.ToolStripMenuItem StackAlg;
         private System.Windows.Forms.ToolStripMenuItem showComponentsToolStripMenuItem;
+        private System.Windows.Forms.TextBox tbShortestPath;
+        private System.Windows.Forms.GroupBox gbShortestPath;
     }
 }
 
