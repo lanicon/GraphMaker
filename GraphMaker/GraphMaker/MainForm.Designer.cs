@@ -1,6 +1,6 @@
 ﻿namespace GraphMaker
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -287,7 +287,7 @@
             this.gbShortestPath.Text = "Кратчайший путь";
             this.gbShortestPath.Visible = false;
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -301,8 +301,9 @@
             this.Controls.Add(this.msGraphMaker);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.msGraphMaker;
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Graph Maker";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.trackBarNodeSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imDrawSpace)).EndInit();
             this.msGraphMaker.ResumeLayout(false);
