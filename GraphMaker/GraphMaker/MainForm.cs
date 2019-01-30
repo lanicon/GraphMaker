@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
-using System.Resources;
+using System.Linq;
 using System.Windows.Forms;
 using GraphMaker.Extensions;
 using GraphMaker.Model;
@@ -10,7 +9,7 @@ using GraphMaker.UI;
 
 namespace GraphMaker
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private enum NodesEdges
         {
@@ -49,7 +48,7 @@ namespace GraphMaker
 
         private int fontImpactId = 3, fontCambriaId = 3;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -396,7 +395,16 @@ namespace GraphMaker
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     var fileName = saveFileDialog.FileName;
-                    var json = UiGraph.Serialize(graph);
+                    string json;
+                    try
+                    {
+                        json = UiGraph.Serialize(graph);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при сериализации графа: {ex.Message}");
+                        return;
+                    }
                     File.WriteAllText(fileName, json);
                     draw();
                 }
@@ -415,7 +423,21 @@ namespace GraphMaker
                 {
                     var fileName = openFileDialog.FileName;
                     var json = File.ReadAllText(fileName);
-                    graph = UiGraph.Deserialize(json);
+                    UiGraph deserializedGraph;
+                    try
+                    {
+                        deserializedGraph = UiGraph.Deserialize(json);
+                        if (deserializedGraph == null)
+                        {
+                            throw new ArgumentException("Файл пуст.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Не удалось десериализовать граф из указанного файла: {ex.Message}");
+                        return;
+                    }
+                    graph = deserializedGraph;
                     graph.Changed += OnGraphUpdate;
                     selectedEdge = null;
                     clickedEdge = null;
@@ -431,20 +453,27 @@ namespace GraphMaker
 
         private void CreateNewFile_Click(object sender, EventArgs e)
         {
-            var dialogResult = MessageBox.Show("Сохранить файл? Все несохраненные изменения будут потеряны.", "", MessageBoxButtons.YesNoCancel);
-            switch (dialogResult)
+            if (graph.Nodes.Any() && SaveFileIfNecessary() == DialogResult.Cancel)
             {
-                case DialogResult.Cancel:
-                    return;
-                case DialogResult.Yes:
-                    SaveGraphToFile();
-                    break;
+                return;
             }
             cbEdgeSizeChange.Items.Clear();
             graph = UiGraph.New();
             graph.Changed += OnGraphUpdate;
             draw();
+        }
 
+        private DialogResult SaveFileIfNecessary()
+        {
+            var dialogResult = MessageBox.Show("Сохранить файл? Все несохраненные изменения будут потеряны.", "",
+                MessageBoxButtons.YesNoCancel);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                SaveGraphToFile();
+            }
+
+            return dialogResult;
         }
 
         private INode spSelectedNode1;
@@ -537,6 +566,14 @@ namespace GraphMaker
                 }
                 MessageBox.Show("Длина кратчайшего пути = " + path + "\n" + outStr);
             }            
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing && graph.Nodes.Any())
+            {
+                SaveFileIfNecessary();
+            }
         }
 
         private void edgesColorBlack()
