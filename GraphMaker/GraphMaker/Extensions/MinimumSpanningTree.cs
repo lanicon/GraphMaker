@@ -51,15 +51,15 @@ namespace GraphMaker.Extensions
             int count = 1;
             if (graph.CCcountStackDFS() > 1)
             {
-                throw new ArgumentException("Поиск минимального остовного дерева невозможен, так как граф несвязный");
+                throw new ArgumentException("Поиск минимального остовного дерева невозможен, так как граф несвязный.");
             }
             if (graph.Nodes.Count == 0)
             {
-                throw new ArgumentException("Не был найден граф");
+                throw new ArgumentException("Поиск минимального остовного дерева невозможен, так как граф не был найден.");
             }
             if (graph.Edges.Count == 0)
             {
-                throw new ArgumentException("Не найдено ни одного ребра");
+                throw new ArgumentException("Поиск минимального остовного дерева невозможен, так как ни одного ребра не было найдено.");
             }
             //MessageBox.Show(PrinLength(graph.Nodes[0].IncidentEdges));
             

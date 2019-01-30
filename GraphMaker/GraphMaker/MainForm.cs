@@ -304,7 +304,7 @@ namespace GraphMaker
             if (count == 1)
                 MessageBox.Show("1 компонента связности.");
             else
-                MessageBox.Show(count + "компонент(ы) связности.");
+                MessageBox.Show(count + " компонент(ы) связности.");
         }
 
         private void StackAlg_Click(object sender, EventArgs e)
