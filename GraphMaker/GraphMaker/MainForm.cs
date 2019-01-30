@@ -570,9 +570,12 @@ namespace GraphMaker
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing && graph.Nodes.Any())
+            if (e.CloseReason == CloseReason.UserClosing)
             {
-                SaveFileIfNecessary();
+                if (graph.Nodes.Any() && SaveFileIfNecessary() == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
             }
         }
 
