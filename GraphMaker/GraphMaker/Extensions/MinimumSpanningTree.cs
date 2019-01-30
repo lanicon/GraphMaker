@@ -28,7 +28,7 @@ namespace GraphMaker.Extensions
             return temp;
         }
 
-        public static void PrintEdges(List<IEdge> edges)
+        public static string PrintEdges(this IGraph graph, List<IEdge> edges)
         {
             int sum = 0;
             foreach (var edge in edges)
@@ -40,7 +40,7 @@ namespace GraphMaker.Extensions
             {
                 temp += edge.ToString() + " (" + edge.Length + ")\n";
             }
-            MessageBox.Show(temp);
+            return temp;
         }
 
         public static List<IEdge> MinTreePrim(this IGraph graph)
@@ -51,18 +51,15 @@ namespace GraphMaker.Extensions
             int count = 1;
             if (graph.CCcountStackDFS() > 1)
             {
-                MessageBox.Show("Поиск минимального остовного дерева невозможен, так как граф несвязный");
-                return null;
+                throw new ArgumentException("Поиск минимального остовного дерева невозможен, так как граф несвязный");
             }
             if (graph.Nodes.Count == 0)
             {
-                MessageBox.Show("Не был найден граф");
-                return null;
+                throw new ArgumentException("Не был найден граф");
             }
             if (graph.Edges.Count == 0)
             {
-                MessageBox.Show("Не найдено ни одного ребра");
-                return null;
+                throw new ArgumentException("Не найдено ни одного ребра");
             }
             //MessageBox.Show(PrinLength(graph.Nodes[0].IncidentEdges));
             
@@ -97,7 +94,6 @@ namespace GraphMaker.Extensions
                         .First().IncidentEdges);
                     count++;
                 }
-            PrintEdges(primEdge);
             return primEdge;
         }
     }

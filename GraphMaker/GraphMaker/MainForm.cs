@@ -356,17 +356,28 @@ namespace GraphMaker
         private void MST_Click(object sender, EventArgs e)
         {
             edgesColorBlack();
-            var minTree = graph.MinTreePrim();
-            foreach (var node in graph.Nodes)
-                graph.NodeInfos[node].Color = Color.White;
-
-            Color color = Color.Blue;
-            if (minTree != null)
-                foreach (var edge in minTree)
+            try
+            {
+                var minTree = graph.MinTreePrim();
+                if(minTree != null)
                 {
-                    var edgeInfo = graph.EdgeInfos[edge];
-                    edgeInfo.Color = color;
+                    MessageBox.Show(graph.PrintEdges(minTree));
                 }
+                foreach (var node in graph.Nodes)
+                    graph.NodeInfos[node].Color = Color.White;
+
+                Color color = Color.Blue;
+                if (minTree != null)
+                    foreach (var edge in minTree)
+                    {
+                        var edgeInfo = graph.EdgeInfos[edge];
+                        edgeInfo.Color = color;
+                    }
+            }
+            catch(Exception exep)
+            {
+                MessageBox.Show(exep.Message);
+            }
         }
 
         private void SaveFile_Click(object sender, EventArgs e)
