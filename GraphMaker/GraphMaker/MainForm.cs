@@ -394,6 +394,8 @@ namespace GraphMaker
                         var edgeInfo = graph.EdgeInfos[edge];
                         edgeInfo.Color = color;
                     }
+
+                cbEdgeSizeChange.SelectedItem = null;
             }
             catch(Exception exep)
             {
@@ -410,7 +412,7 @@ namespace GraphMaker
         {
             using (var saveFileDialog = new SaveFileDialog())
             {
-                saveFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
+                saveFileDialog.Filter = "GraphMaker files (*.gm)|*.gm";
                 saveFileDialog.FilterIndex = 1;
                 saveFileDialog.RestoreDirectory = true;
 
@@ -437,7 +439,7 @@ namespace GraphMaker
         {
             using (var openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt";
+                openFileDialog.Filter = " GraphMaker files (*.gm)|*.gm";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
 
@@ -587,6 +589,7 @@ namespace GraphMaker
                     path += edge.Length;
                 }
                 MessageBox.Show("Длина кратчайшего пути = " + path + "\n" + outStr);
+                cbEdgeSizeChange.SelectedItem = null;
             }            
         }
 
@@ -601,6 +604,11 @@ namespace GraphMaker
             }
         }
 
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            draw();
+        }
+
         private void edgesColorBlack()
         {
             foreach (var edge in graph.EdgeInfos)
@@ -611,6 +619,8 @@ namespace GraphMaker
         
         private void draw()
         {
+            if (graph == null)
+                return;
             var buffer = new Bitmap(imDrawSpace.Width, imDrawSpace.Height);
             var bufferGraphics = Graphics.FromImage(buffer);
             var size = trackBarNodeSize.Value;
