@@ -61,8 +61,12 @@ namespace GraphMaker.Model
 
         public IEdge AddEdge(INode first, INode second, int length = 1)
         {
+            var isIncident = first.IncidentNodes.Contains(second);
             var edge = Node.Connect(first, second, length);
-            OnChanged(GraphOperation.AddEdge, edge);
+            if (!isIncident)
+            {
+                OnChanged(GraphOperation.AddEdge, edge);
+            }
             return edge;
         }
 

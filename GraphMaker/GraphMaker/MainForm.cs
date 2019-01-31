@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -71,7 +73,27 @@ namespace GraphMaker
                 case GraphOperation.AddNode:
                     break;
                 case GraphOperation.AddEdge:
-                    cbEdgeSizeChange.Items.Add(obj);
+                    var edge = (IEdge)obj;
+                    var nodeComparer = Comparer<INode>.Create((x, y) => x.Number.CompareTo(y.Number));
+                    var edgeComparer = Comparer<IEdge>.Create((x, y) =>
+                    {
+                        var result = nodeComparer.Compare(x.First, y.First);
+                        if (result == 0)
+                        {
+                            return nodeComparer.Compare(x.Second, y.Second);
+                        }
+                        return result;
+                    });
+                    var i = 0;
+                    for (; i < cbEdgeSizeChange.Items.Count; i++)
+                    {
+                        var fromCb = (IEdge)cbEdgeSizeChange.Items[i];
+                        if (edgeComparer.Compare(edge, fromCb) < 0)
+                        {
+                            break;
+                        }
+                    }
+                    cbEdgeSizeChange.Items.Insert(i, obj);
                     break;
                 case GraphOperation.DeleteNode:
                     break;

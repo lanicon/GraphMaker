@@ -28,9 +28,15 @@ namespace GraphMaker.Model
             {
                 throw new ArgumentException("the beginning and end of the edge are the same");
             }
-
-            First = first;
-            Second = second;
+            var minByNumber = first;
+            var maxByNumber = second;
+            if (first.Number > second.Number)
+            {
+                minByNumber = second;
+                maxByNumber = first;
+            }
+            First = minByNumber;
+            Second = maxByNumber;
         }
 
         public INode OtherNode(INode node)
